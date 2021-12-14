@@ -1,10 +1,7 @@
 package CPU;
 
 import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
-import oshi.hardware.Display;
-import oshi.hardware.GlobalMemory;
-import oshi.hardware.GraphicsCard;
+import oshi.hardware.*;
 import oshi.util.EdidUtil;
 
 import java.util.List;
