@@ -13,8 +13,8 @@ import javax.swing.plaf.ColorUIResource;
  *
  * @author ADMIN
  */
-public class PcInfo extends javax.swing.JFrame {
 
+public class PcInfo extends javax.swing.JFrame {
     /**
      * Creates new form testUI
      */
@@ -197,7 +197,7 @@ public class PcInfo extends javax.swing.JFrame {
             }
         });
 
-        tabName2.setText("Hệ điêu");
+        tabName2.setText("Hệ điều hành");
 
         javax.swing.GroupLayout tab2Layout = new javax.swing.GroupLayout(tab2);
         tab2.setLayout(tab2Layout);
