@@ -3,9 +3,9 @@ package CPU;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.Display;
+import oshi.hardware.GlobalMemory;
 import oshi.hardware.GraphicsCard;
 import oshi.util.EdidUtil;
-import oshi.util.ExecutingCommand;
 
 import java.util.List;
 
@@ -60,10 +60,22 @@ public class HW_Info {
         return sb.toString();
     }
 
+    public static String UpdatePhysTitle(GlobalMemory memory) {
+        return memory.toString();
+    }
+    public static String UpdateVirtTitle(GlobalMemory memory) {
+        return memory.getVirtualMemory().toString();
+    }
+    //Both of the method only update the TITLE (The black text on the UI)
+
     public static  void main(String[] args) {
         SystemInfo si = new SystemInfo();
-        System.out.println(GetGPU(si));
+        GlobalMemory memory = si.getHardware().getMemory();
+
+        System.out.println(GetCPU(si));
         System.out.println(GetGPU(si));
         System.out.println(GetDisplay(si));
+        System.out.println(UpdatePhysTitle(memory));
+        System.out.println(UpdateVirtTitle(memory));
     }
 }
