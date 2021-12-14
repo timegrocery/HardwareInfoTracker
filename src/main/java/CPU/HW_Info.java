@@ -10,6 +10,10 @@ import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.util.EdidUtil;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -54,6 +58,18 @@ public class HW_Info {
         return sb.toString();
     }
 
+    public static String GetHw(SystemInfo si) {
+        StringBuilder sb = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
+        ComputerSystem computerSystem = si.getHardware().getComputerSystem();
+        try {
+            sb.append(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(computerSystem));
+        } catch (JsonProcessingException e) {
+            sb.append(e.getMessage());
+        }
+        return sb.toString();
+    }
+
     public static String UpdatePhysTitle(GlobalMemory memory) {
         return memory.toString();
     }
@@ -62,7 +78,7 @@ public class HW_Info {
     }
     //Both of the method only update the TITLE (The black text on the UI)
 
-    private static void updateDatasets(GlobalMemory memory, DefaultPieDataset physMemData,
+    private static void UpdateDatasets(GlobalMemory memory, DefaultPieDataset physMemData,
                                        DefaultPieDataset virtMemData) {
         physMemData.setValue(USED, (double) memory.getTotal() - memory.getAvailable());
         physMemData.setValue(AVAILABLE, memory.getAvailable());
@@ -72,7 +88,7 @@ public class HW_Info {
         virtMemData.setValue(AVAILABLE, (double) virtualMemory.getSwapTotal() - virtualMemory.getSwapUsed());
     }
 
-    private static void configurePlot(JFreeChart chart) {
+    private static void ConfigurePlot(JFreeChart chart) {
         @SuppressWarnings("unchecked")
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setSectionPaint(USED, Color.red);
@@ -92,5 +108,6 @@ public class HW_Info {
         System.out.println(GetDisplay(si));
         System.out.println(UpdatePhysTitle(memory));
         System.out.println(UpdateVirtTitle(memory));
+        System.out.println(GetHw(si));
     }
 }
