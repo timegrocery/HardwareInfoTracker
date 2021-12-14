@@ -12,26 +12,6 @@ import java.util.List;
 
 public class HW_Info {
 
-    public static String GetCPU(SystemInfo si)
-    {
-        StringBuilder sb = new StringBuilder();
-        CentralProcessor proc = si.getHardware().getProcessor();
-        sb.append(proc.toString());
-        return sb.toString();
-    }
-
-    public static String GetGPU(SystemInfo si) {
-        StringBuilder sb = new StringBuilder();
-        List<GraphicsCard> vgas = si.getHardware().getGraphicsCards();
-
-        for (GraphicsCard vga : vgas)
-        {
-            sb.append(vga);
-            sb.append("\n");
-        }
-        return  sb.toString();
-    }
-
     public static String GetDisplay(SystemInfo si) {
         StringBuilder sb = new StringBuilder();
         List<Display> displays = si.getHardware().getDisplays();
