@@ -2,7 +2,9 @@ package CPU;
 
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
+import oshi.hardware.Display;
 import oshi.hardware.GraphicsCard;
+import oshi.util.EdidUtil;
 import oshi.util.ExecutingCommand;
 
 import java.util.List;
@@ -30,10 +32,38 @@ public class HW_Info {
         return  sb.toString();
     }
 
+    public static String GetDisplay(SystemInfo si) {
+        StringBuilder sb = new StringBuilder();
+        List<Display> displays = si.getHardware().getDisplays();
+        if (displays.isEmpty()) {
+            sb.append("None detected.");
+        } else {
+            int i = 0;
+            for (Display display : displays) {
+                byte[] edid = display.getEdid();
+                byte[][] desc = EdidUtil.getDescriptors(edid);
+                String name = "Display " + i;
+                for (byte[] b : desc) {
+                    if (EdidUtil.getDescriptorType(b) == 0xfc) {
+                        name = EdidUtil.getDescriptorText(b);
+                    }
+                }
+                if (i++ > 0) {
+                    sb.append('\n');
+                }
+                sb.append(name).append(": ");
+                int hSize = EdidUtil.getHcm(edid);
+                int vSize = EdidUtil.getVcm(edid);
+                sb.append(String.format("%d x %d cm (%.1f x %.1f in)", hSize, vSize, hSize / 2.54, vSize / 2.54));
+            }
+        }
+        return sb.toString();
+    }
+
     public static  void main(String[] args) {
         SystemInfo si = new SystemInfo();
-        String s = GetCPU(si);
         System.out.println(GetGPU(si));
-        System.out.println(s);
+        System.out.println(GetGPU(si));
+        System.out.println(GetDisplay(si));
     }
 }
