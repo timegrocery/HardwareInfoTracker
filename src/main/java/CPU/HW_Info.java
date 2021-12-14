@@ -72,8 +72,6 @@ public class HW_Info {
         SystemInfo si = new SystemInfo();
         GlobalMemory memory = si.getHardware().getMemory();
 
-        System.out.println(GetCPU(si));
-        System.out.println(GetGPU(si));
         System.out.println(GetDisplay(si));
         System.out.println(UpdatePhysTitle(memory));
         System.out.println(UpdateVirtTitle(memory));
