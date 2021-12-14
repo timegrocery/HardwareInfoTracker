@@ -1,4 +1,4 @@
-/*
+package UI;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -35,7 +35,6 @@ public class PcInfo extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         jPanelMain = new javax.swing.JPanel();
         jPanelHeader = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -71,7 +70,7 @@ public class PcInfo extends javax.swing.JFrame {
 
         jPanelHeader.setBackground(new java.awt.Color(188, 133, 163));
 
-        //jLabel5.setIcon(new javax.swing.ImageIcon((getClass().getResource("image/G (2).png")))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon("./image/G (2).png"));
 
         javax.swing.GroupLayout jPanelHeaderLayout = new javax.swing.GroupLayout(jPanelHeader);
         jPanelHeader.setLayout(jPanelHeaderLayout);
@@ -554,7 +553,6 @@ public class PcInfo extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(PcInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
