@@ -1,17 +1,22 @@
 package Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
 import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
-
 import oshi.SystemInfo;
+<<<<<<< Updated upstream:src/main/java/Test/HW_Info.java
 import oshi.hardware.*;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
+=======
+import oshi.hardware.ComputerSystem;
+import oshi.hardware.Display;
+import oshi.hardware.GlobalMemory;
+import oshi.hardware.VirtualMemory;
+import oshi.util.EdidUtil;
+>>>>>>> Stashed changes:src/main/java/CPU/HW_Info.java
 
 import java.awt.*;
 import java.text.DecimalFormat;
