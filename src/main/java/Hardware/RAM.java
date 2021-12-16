@@ -18,7 +18,7 @@ public class RAM {
         for(PhysicalMemory physicalMemory: physicalMemoryList) {
             String bankLabel = physicalMemory.getBankLabel();
             long capacity = physicalMemory.getCapacity();
-            capacity /= 11048576; // capacity in Mb;
+            capacity /= 1048576; // capacity in Mb;
             totalCapacity += capacity;
             long clockSpeed = physicalMemory.getClockSpeed();
             clockSpeed /= 1_000_000; // clock speed in Hz;
