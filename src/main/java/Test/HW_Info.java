@@ -1,4 +1,4 @@
-package TestField;
+package Test;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.labels.PieSectionLabelGenerator;
