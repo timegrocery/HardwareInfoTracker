@@ -1,4 +1,4 @@
-package Hardware;
+package Performance;
 
 import java.awt.*;
 import java.time.LocalDateTime;
@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.swing.*;
 
+import UI.UsageJPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -101,6 +102,5 @@ public class CPU_Usage extends UsageJPanel {
         frame.add(new CPU_Usage(si));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
     }
 }
