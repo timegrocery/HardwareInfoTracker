@@ -1,16 +1,16 @@
-package Test;
+package Hardware;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class OshiJPanel extends JPanel {
+public class UsageJPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
     protected JLabel msgLabel = new JLabel();
     protected JPanel msgPanel = new JPanel();
 
-    public OshiJPanel() {
+    public UsageJPanel() {
         Dimension maxSize = getMaximumSize();
         if (maxSize != null) {
             setSize(maxSize);

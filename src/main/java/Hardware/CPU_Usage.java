@@ -1,40 +1,28 @@
-package Test;
+package Hardware;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Random;
 
 import javax.swing.*;
 
-import com.sun.jna.platform.mac.SystemB;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.ui.UIUtils;
-import org.jfree.data.general.SeriesException;
 import org.jfree.data.time.*;
-import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-
-public class Dynamic_chart extends  OshiJPanel {
+public class CPU_Usage extends UsageJPanel {
 
     private static final long serialVersionUID = 1L;
+    public static final int REFRESH_RATE = 1000;
 
     private long[] oldTicks;
     private long[][] oldProcTicks;
 
-    public Dynamic_chart(SystemInfo si) {
+    public CPU_Usage(SystemInfo si) {
         super();
         CentralProcessor cpu = si.getHardware().getProcessor();
         oldTicks = new long[CentralProcessor.TickType.values().length];
@@ -55,7 +43,7 @@ public class Dynamic_chart extends  OshiJPanel {
         Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
         sysData.setTimeBase(new Second(date));
-        sysData.addSeries(floatArrayPercent(cpuData(processor)), 0, "All cpus");
+        sysData.addSeries(FloatArrayPercent(cpuData(processor)), 0, "All cpus");
         JFreeChart systemCpu = ChartFactory.createTimeSeriesChart("System CPU Usage", "Time", "% CPU", sysData, true,
                 true, false);
 
@@ -63,7 +51,7 @@ public class Dynamic_chart extends  OshiJPanel {
         DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
         procData.setTimeBase(new Second(date));
         for (int i = 0; i < procUsage.length; i++) {
-            procData.addSeries(floatArrayPercent(procUsage[i]), i, "cpu" + i);
+            procData.addSeries(FloatArrayPercent(procUsage[i]), i, "cpu" + i);
         }
         JFreeChart procCpu = ChartFactory.createTimeSeriesChart("Processor CPU Usage", "Time", "% CPU", procData, true,
                 true, false);
@@ -75,9 +63,9 @@ public class Dynamic_chart extends  OshiJPanel {
 
         add(cpuPanel, BorderLayout.CENTER);
 
-        Timer timer = new Timer(Config.REFRESH_FAST, e -> {
+        Timer timer = new Timer(REFRESH_RATE, e -> {
             sysData.advanceTime();
-            sysData.appendData(floatArrayPercent(cpuData(processor)));
+            sysData.appendData(FloatArrayPercent(cpuData(processor)));
             procData.advanceTime();
             int newest = procData.getNewestIndex();
             double[] procUsageData = procData(processor);
@@ -88,7 +76,7 @@ public class Dynamic_chart extends  OshiJPanel {
         timer.start();
     }
 
-    private static float[] floatArrayPercent(double d) {
+    private static float[] FloatArrayPercent(double d) {
         float[] f = new float[1];
         f[0] = (float) (100d * d);
         return f;
@@ -110,8 +98,9 @@ public class Dynamic_chart extends  OshiJPanel {
     {
         JFrame frame = new JFrame();
         SystemInfo si = new SystemInfo();
-        frame.add(new Dynamic_chart(si));
+        frame.add(new CPU_Usage(si));
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
     }
 }
