@@ -7,7 +7,7 @@ import java.util.Date;
 
 import javax.swing.*;
 
-import UI.UsageJPanel;
+import UI.OshiPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -15,7 +15,7 @@ import org.jfree.data.time.*;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 
-public class CPU_Usage extends UsageJPanel {
+public class CPU_Usage extends OshiPanel {
 
     private static final long serialVersionUID = 1L;
     public static final int REFRESH_RATE = 1000;
