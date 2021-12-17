@@ -1,4 +1,4 @@
-package Statistic;
+package Performance;
 
 import oshi.SystemInfo;
 import oshi.hardware.GlobalMemory;
