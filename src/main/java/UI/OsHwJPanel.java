@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package UI;
 
 /**
@@ -15,6 +12,7 @@ public class OsHwJPanel extends javax.swing.JPanel {
      */
     public OsHwJPanel() {
         initComponents();
+        setEditable(false);
     }
 
     /**
@@ -35,7 +33,7 @@ public class OsHwJPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(204, 204, 204));
+        setBackground(new java.awt.Color(161, 201, 241));
         setPreferredSize(new java.awt.Dimension(810, 430));
 
         jtfOS.addActionListener(new java.awt.event.ActionListener() {
@@ -140,7 +138,12 @@ public class OsHwJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfHIActionPerformed
 
-
+   private void setEditable(boolean flag) {
+        jtfDisplay.setEditable(false); // tr�nh l?i trong l�c ch?nh s?a csdl
+       jtfHI.setEditable(false);
+       jtfOS.setEditable(false);
+       jtfProc.setEditable(false);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -16,8 +16,8 @@ public class NavigationBUS {
     }
     public void setView (JPanel jpnItem, JLabel jlbItem) {
         kindSelected = "OS and HW Info";
-        jpnItem.setBackground (new Color (96, 100, 191));
-        jlbItem.setBackground (new Color (96, 100, 191));
+        jpnItem.setBackground (new Color (180,159,220));
+        jlbItem.setBackground (new Color (180,159,220));
         root.removeAll();
         root.setLayout(new BorderLayout());
         root.add (new OsHwJPanel());
@@ -45,14 +45,33 @@ public class NavigationBUS {
         
         
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             switch (kind){
                 case "OS & HW Info":
                     node = new OsHwJPanel();
                     break;
                 case "Memory":
                     node = new MemoryJPanel();
+                   
                     break;
+                case "CPU" :
+                    node = new CPUjPanel();
+                     
+                    break;
+                case "FileStore":
+                    node = new FileStoreJPanel();
+                    break;
+                case "Processes" :
+                    node = new ProcessesJPanel();
+                    break;
+                  case "USB Devices" :
+                    node = new USBDeviceJpanel();
+                    break;
+                  case "Network" :
+                    node = new NetworkJPanel();
+
+                    break;        
+                    
             default:
                 break;
             }        
@@ -64,10 +83,8 @@ public class NavigationBUS {
             setChangeBackgroud(kind);
         }
         @Override
-        public void mousePressed(MouseEvent e) {
-            kindSelected = kind;
-            jpnItem.setBackground (new Color (96, 100, 191));
-            jlblItem.setBackground (new Color (96, 100, 191));
+        public void mouseClicked(MouseEvent e) {
+           
         }
         @Override
         public void mouseReleased(MouseEvent e){
@@ -75,25 +92,25 @@ public class NavigationBUS {
         }
         @Override
         public void mouseEntered (MouseEvent e){
-            jpnItem.setBackground (new Color (96, 100, 191));
-            jlblItem.setBackground (new Color (96, 100, 191));
+//            jpnItem.setBackground (new Color (180,159,220));
+//            jlblItem.setBackground (new Color (180,159,220));
         }
         @Override
         public void mouseExited(MouseEvent e){
-            if (!kindSelected.equalsIgnoreCase (kind)){
-                jpnItem.setBackground (new Color (76, 175, 80));
-                jlblItem.setBackground (new Color (76, 175, 80));
-            }    
+//            if (!kindSelected.equalsIgnoreCase (kind)){
+//                jpnItem.setBackground (new Color (119, 153, 204));
+//                jlblItem.setBackground (new Color (119, 153, 204));
+//            }    
         }
     }
     private void setChangeBackgroud (String kind){
         for (var item : listItem) {
             if(item.getKind ().equalsIgnoreCase (kind)) {
-                item.getJpn ().setBackground (new Color (96, 100, 191));
-                item.getJlb ().setBackground (new Color (96, 100, 191));
+                item.getJpn ().setBackground (new Color (119, 153, 204));
+                item.getJlb ().setBackground (new Color (119, 153, 204));
             }else{
-                item.getJpn ().setBackground (new Color (76, 175, 80));
-                item.getJlb().setBackground(new Color (76, 175, 80));
+                item.getJpn ().setBackground (new Color (180,159,220));
+                item.getJlb().setBackground(new Color (180,159,220));
             }     
         }  
     }    

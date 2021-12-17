@@ -22,7 +22,11 @@ public class MainJFrame extends javax.swing.JFrame {
         ArrayList<ListDTO> listItem = new ArrayList<>();
         listItem.add (new ListDTO ("OS & HW Info", jPnlOS, jLblOS));
         listItem.add (new ListDTO ("Memory", jPnlMemory, jLblMemory));
-  
+        listItem.add(new ListDTO("CPU",jPnlCPU,jLblCPU));
+        listItem.add(new ListDTO("FileStore",jPnlFileStore,jlblFS));
+        listItem.add(new ListDTO("Processes",jPnlProc,jLblProc));
+        listItem.add(new ListDTO("USB Devices",jPnlUSB,jLblUSB));
+        listItem.add(new ListDTO("Network",jPnlNetwork,jLblNetwork));
         nav.setEvent(listItem);
         
     }
@@ -45,7 +49,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlCPU = new javax.swing.JPanel();
         jLblCPU = new javax.swing.JLabel();
         jPnlFileStore = new javax.swing.JPanel();
-        jPnlFS = new javax.swing.JLabel();
+        jlblFS = new javax.swing.JLabel();
         jPnlProc = new javax.swing.JPanel();
         jLblProc = new javax.swing.JLabel();
         jPnlUSB = new javax.swing.JPanel();
@@ -53,6 +57,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlNetwork = new javax.swing.JPanel();
         jLblNetwork = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        LogojLabel = new javax.swing.JLabel();
         jPnlContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -60,7 +65,7 @@ public class MainJFrame extends javax.swing.JFrame {
         setBackground(new java.awt.Color(0, 153, 255));
         getContentPane().setLayout(null);
 
-        jPnlHeader.setBackground(new java.awt.Color(0, 153, 255));
+        jPnlHeader.setBackground(new java.awt.Color(197, 235, 254));
 
         javax.swing.GroupLayout jPnlHeaderLayout = new javax.swing.GroupLayout(jPnlHeader);
         jPnlHeader.setLayout(jPnlHeaderLayout);
@@ -70,15 +75,15 @@ public class MainJFrame extends javax.swing.JFrame {
         );
         jPnlHeaderLayout.setVerticalGroup(
             jPnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 90, Short.MAX_VALUE)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPnlHeader);
-        jPnlHeader.setBounds(163, 0, 800, 90);
+        jPnlHeader.setBounds(163, 0, 800, 100);
 
-        jPnlMenu.setBackground(new java.awt.Color(0, 153, 255));
+        jPnlMenu.setBackground(new java.awt.Color(197, 235, 254));
 
-        jPnlOS.setBackground(new java.awt.Color(153, 255, 153));
+        jPnlOS.setBackground(new java.awt.Color(180, 159, 220));
         jPnlOS.setPreferredSize(new java.awt.Dimension(176, 35));
 
         jLblOS.setBackground(new java.awt.Color(0, 255, 255));
@@ -91,14 +96,14 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGroup(jPnlOSLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(jLblOS)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPnlOSLayout.setVerticalGroup(
             jPnlOSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLblOS, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPnlMemory.setBackground(new java.awt.Color(153, 255, 153));
+        jPnlMemory.setBackground(new java.awt.Color(180, 159, 220));
         jPnlMemory.setPreferredSize(new java.awt.Dimension(119, 35));
 
         jLblMemory.setText("Memory");
@@ -117,7 +122,7 @@ public class MainJFrame extends javax.swing.JFrame {
             .addComponent(jLblMemory, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPnlCPU.setBackground(new java.awt.Color(153, 255, 153));
+        jPnlCPU.setBackground(new java.awt.Color(180, 159, 220));
         jPnlCPU.setPreferredSize(new java.awt.Dimension(119, 35));
 
         jLblCPU.setText("CPU");
@@ -136,10 +141,10 @@ public class MainJFrame extends javax.swing.JFrame {
             .addComponent(jLblCPU, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPnlFileStore.setBackground(new java.awt.Color(153, 255, 153));
+        jPnlFileStore.setBackground(new java.awt.Color(180, 159, 220));
         jPnlFileStore.setPreferredSize(new java.awt.Dimension(119, 35));
 
-        jPnlFS.setText("FileStore");
+        jlblFS.setText("FileStore");
 
         javax.swing.GroupLayout jPnlFileStoreLayout = new javax.swing.GroupLayout(jPnlFileStore);
         jPnlFileStore.setLayout(jPnlFileStoreLayout);
@@ -147,15 +152,15 @@ public class MainJFrame extends javax.swing.JFrame {
             jPnlFileStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlFileStoreLayout.createSequentialGroup()
                 .addGap(44, 44, 44)
-                .addComponent(jPnlFS)
+                .addComponent(jlblFS)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPnlFileStoreLayout.setVerticalGroup(
             jPnlFileStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPnlFS, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+            .addComponent(jlblFS, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPnlProc.setBackground(new java.awt.Color(153, 255, 153));
+        jPnlProc.setBackground(new java.awt.Color(180, 159, 220));
         jPnlProc.setPreferredSize(new java.awt.Dimension(119, 35));
 
         jLblProc.setBackground(new java.awt.Color(153, 255, 153));
@@ -165,17 +170,17 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlProc.setLayout(jPnlProcLayout);
         jPnlProcLayout.setHorizontalGroup(
             jPnlProcLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPnlProcLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPnlProcLayout.createSequentialGroup()
+                .addGap(45, 45, 45)
                 .addComponent(jLblProc)
-                .addGap(42, 42, 42))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPnlProcLayout.setVerticalGroup(
             jPnlProcLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLblProc, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPnlUSB.setBackground(new java.awt.Color(153, 255, 153));
+        jPnlUSB.setBackground(new java.awt.Color(180, 159, 220));
         jPnlUSB.setPreferredSize(new java.awt.Dimension(119, 35));
 
         jLblUSB.setText("USB Devices");
@@ -194,7 +199,7 @@ public class MainJFrame extends javax.swing.JFrame {
             .addComponent(jLblUSB, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
-        jPnlNetwork.setBackground(new java.awt.Color(153, 255, 153));
+        jPnlNetwork.setBackground(new java.awt.Color(180, 159, 220));
         jPnlNetwork.setPreferredSize(new java.awt.Dimension(119, 35));
 
         jLblNetwork.setText("Network");
@@ -213,39 +218,44 @@ public class MainJFrame extends javax.swing.JFrame {
             .addComponent(jLblNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        LogojLabel.setIcon(new javax.swing.ImageIcon("D:\\SGU\\HK1 21-22\\HardwareInfoTracker\\image\\G (2).png")); // NOI18N
+        LogojLabel.setText("jLabel1");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(LogojLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 88, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(LogojLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPnlMenuLayout = new javax.swing.GroupLayout(jPnlMenu);
         jPnlMenu.setLayout(jPnlMenuLayout);
         jPnlMenuLayout.setHorizontalGroup(
             jPnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPnlMenuLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPnlMemory, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(jPnlCPU, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(jPnlFileStore, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(jPnlOS, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(jPnlProc, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(jPnlUSB, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(jPnlNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
-                .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPnlOS, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(jPnlMemory, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(jPnlCPU, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(jPnlFileStore, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(jPnlProc, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(jPnlUSB, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(jPnlNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
         );
         jPnlMenuLayout.setVerticalGroup(
             jPnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlMenuLayout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPnlOS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPnlMemory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -264,6 +274,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
         getContentPane().add(jPnlMenu);
         jPnlMenu.setBounds(0, 0, 160, 520);
+
+        jPnlContainer.setBackground(new java.awt.Color(161, 201, 241));
 
         javax.swing.GroupLayout jPnlContainerLayout = new javax.swing.GroupLayout(jPnlContainer);
         jPnlContainer.setLayout(jPnlContainerLayout);
@@ -319,6 +331,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LogojLabel;
     private javax.swing.JLabel jLblCPU;
     private javax.swing.JLabel jLblMemory;
     private javax.swing.JLabel jLblNetwork;
@@ -328,7 +341,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPnlCPU;
     private javax.swing.JPanel jPnlContainer;
-    private javax.swing.JLabel jPnlFS;
     private javax.swing.JPanel jPnlFileStore;
     private javax.swing.JPanel jPnlHeader;
     private javax.swing.JPanel jPnlMemory;
@@ -337,5 +349,6 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPnlOS;
     private javax.swing.JPanel jPnlProc;
     private javax.swing.JPanel jPnlUSB;
+    private javax.swing.JLabel jlblFS;
     // End of variables declaration//GEN-END:variables
 }
