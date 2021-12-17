@@ -6,7 +6,9 @@ import oshi.software.os.OperatingSystem;
 public class OS {
     public static String GetOSVersionInfo() {
         SystemInfo si = new SystemInfo();
-        OperatingSystem.OSVersionInfo osVersionInfo = si.getOperatingSystem().getVersionInfo();
+        OperatingSystem operatingSystem = si.getOperatingSystem();
+        int bitness = operatingSystem.getBitness();
+        OperatingSystem.OSVersionInfo osVersionInfo = operatingSystem.getVersionInfo();
         StringBuilder result = new StringBuilder();
 
         String version, codeName, buildNumber;
@@ -15,7 +17,9 @@ public class OS {
         if (version != null && !version.isEmpty() && !version.isBlank()) {
             result.append(String.format("Windows %s ", version));
         }
-
+        if (bitness != 0) {
+            result.append(String.format("%d bit ", bitness));
+        }
         codeName = osVersionInfo.getCodeName();
         if (codeName != null && !codeName.isBlank() && !codeName.isEmpty()) {
             result.append(String.format("Code %s ", codeName));
