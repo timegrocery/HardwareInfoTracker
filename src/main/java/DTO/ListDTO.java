@@ -13,9 +13,6 @@ public class ListDTO {
     private JPanel jpn;
     private JLabel jlb;
 
-    public ListDTO() {
-    }
-
     public ListDTO(String kind, JPanel jpn, JLabel jlb) {
         this.kind = kind;
         this.jpn = jpn;

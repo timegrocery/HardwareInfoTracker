@@ -2,6 +2,9 @@ package BUS;
 
 import DTO.ListDTO;
 import UI.*;
+import UI.Process;
+import oshi.SystemInfo;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -42,41 +45,23 @@ public class NavigationBUS {
             this.jpnItem = jpnItem;
             this.jlblItem = jLblItem;
         }
-        
-        
+
         @Override
         public void mousePressed(MouseEvent e) {
             switch (kind){
-                case "OS & HW Info":
-                    node = new OsHwJPanel();
-                    break;
-                case "Memory":
-                    node = new MemoryJPanel();
-                   
-                    break;
-                case "CPU" :
-                    node = new CPUjPanel();
-                     
-                    break;
-                case "FileStore":
-                    node = new FileStoreJPanel();
-                    break;
-                case "Processes" :
-                    node = new ProcessesJPanel();
-                    break;
-                  case "USB Devices" :
-                    node = new USBDeviceJpanel();
-                    break;
-                  case "Network" :
-                    node = new NetworkJPanel();
-
-                    break;        
+                case "OS & HW Info" -> node = new OsHwJPanel();
+                case "Memory" -> node = new MemoryJPanel();
+                case "CPU" -> node = new CPU_Usage(new SystemInfo());
+                case "FileStore" -> node = new FileStoreJPanel();
+                case "Processes" -> node = new Process(new SystemInfo());
+                case "USB Devices" -> node = new USBDeviceJpanel();
+                case "Network" -> node = new NetworkJPanel();        
                     
-            default:
-                break;
+            default -> {
+                }
             }        
             root.removeAll();
-            root.setLayout (new BorderLayout ());
+            root.setLayout (new BorderLayout());
             root.add (node);
             root.validate();
             root.repaint();

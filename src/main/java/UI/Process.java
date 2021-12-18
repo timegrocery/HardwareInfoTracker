@@ -1,7 +1,5 @@
-package Hardware;
+package UI;
 
-import Performance.CPU_Usage;
-import UI.OshiPanel;
 import oshi.PlatformEnum;
 import oshi.SystemInfo;
 import oshi.software.os.OSProcess;
