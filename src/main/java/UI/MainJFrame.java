@@ -7,18 +7,14 @@ package UI;
 import BUS.NavigationBUS;
 import DTO.ListDTO;
 import java.util.ArrayList;
-import java.util.List;
-public class MainJFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainJFrame
-     */
+public class MainJFrame extends javax.swing.JFrame {
     public MainJFrame() {
         initComponents();
         
         NavigationBUS nav = new NavigationBUS(jPnlContainer);
         nav.setView(jPnlOS, jLblOS);
-        
+        /* navigation bar*/
         ArrayList<ListDTO> listItem = new ArrayList<>();
         listItem.add (new ListDTO ("OS & HW Info", jPnlOS, jLblOS));
         listItem.add (new ListDTO ("Memory", jPnlMemory, jLblMemory));
@@ -94,9 +90,9 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlOSLayout.setHorizontalGroup(
             jPnlOSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlOSLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addGap(43, 43, 43)
                 .addComponent(jLblOS)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         jPnlOSLayout.setVerticalGroup(
             jPnlOSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +109,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlMemoryLayout.setHorizontalGroup(
             jPnlMemoryLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlMemoryLayout.createSequentialGroup()
-                .addGap(42, 42, 42)
+                .addGap(59, 59, 59)
                 .addComponent(jLblMemory)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -132,7 +128,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlCPULayout.setHorizontalGroup(
             jPnlCPULayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlCPULayout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(68, 68, 68)
                 .addComponent(jLblCPU)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -151,7 +147,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlFileStoreLayout.setHorizontalGroup(
             jPnlFileStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlFileStoreLayout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(57, 57, 57)
                 .addComponent(jlblFS)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -170,10 +166,10 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlProc.setLayout(jPnlProcLayout);
         jPnlProcLayout.setHorizontalGroup(
             jPnlProcLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPnlProcLayout.createSequentialGroup()
-                .addGap(45, 45, 45)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPnlProcLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLblProc)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(55, 55, 55))
         );
         jPnlProcLayout.setVerticalGroup(
             jPnlProcLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -190,7 +186,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlUSBLayout.setHorizontalGroup(
             jPnlUSBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlUSBLayout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addGap(48, 48, 48)
                 .addComponent(jLblUSB)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -209,18 +205,17 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlNetworkLayout.setHorizontalGroup(
             jPnlNetworkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlNetworkLayout.createSequentialGroup()
-                .addGap(46, 46, 46)
+                .addGap(58, 58, 58)
                 .addComponent(jLblNetwork)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPnlNetworkLayout.setVerticalGroup(
             jPnlNetworkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLblNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+            .addComponent(jLblNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        LogojLabel.setIcon(new javax.swing.ImageIcon("D:\\SGU\\HK1 21-22\\HardwareInfoTracker\\image\\G (2).png")); // NOI18N
         LogojLabel.setText("jLabel1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -234,7 +229,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(LogojLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addComponent(LogojLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -243,13 +238,16 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlMenuLayout.setHorizontalGroup(
             jPnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPnlOS, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-            .addComponent(jPnlMemory, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-            .addComponent(jPnlCPU, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-            .addComponent(jPnlFileStore, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-            .addComponent(jPnlProc, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-            .addComponent(jPnlUSB, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-            .addComponent(jPnlNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addGroup(jPnlMenuLayout.createSequentialGroup()
+                .addGroup(jPnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPnlNetwork, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(jPnlUSB, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(jPnlProc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(jPnlFileStore, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(jPnlCPU, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(jPnlOS, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(jPnlMemory, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPnlMenuLayout.setVerticalGroup(
             jPnlMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,8 +266,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPnlUSB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPnlNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addComponent(jPnlNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
 
         getContentPane().add(jPnlMenu);
@@ -285,13 +283,13 @@ public class MainJFrame extends javax.swing.JFrame {
         );
         jPnlContainerLayout.setVerticalGroup(
             jPnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 420, Short.MAX_VALUE)
+            .addGap(0, 430, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPnlContainer);
-        jPnlContainer.setBounds(163, 95, 800, 420);
+        jPnlContainer.setBounds(163, 95, 800, 430);
 
-        setBounds(0, 0, 977, 552);
+        setBounds(0, 0, 975, 555);
     }// </editor-fold>//GEN-END:initComponents
 
     /**

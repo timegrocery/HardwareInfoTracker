@@ -18,10 +18,9 @@ public class SendCommand {
         return SendCommand("shutdown /s /t 0");
     }
 
-    public static String SendCommand_LogOff() {
+    public static String SenCommand_LogOff() {
         return SendCommand("shutdown /h /t 0");
     }
-
     public static void main(String[] args) {
         System.out.println(SendCommand("tasklist"));
     }

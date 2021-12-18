@@ -1,13 +1,14 @@
 package Performance;
 
 import java.awt.*;
+import java.io.Serial;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
 import javax.swing.*;
 
-import UI.OshiPanel;
+import UI.OshiJPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -15,8 +16,9 @@ import org.jfree.data.time.*;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 
-public class CPU_Usage extends OshiPanel {
+public class CPU_Usage extends OshiJPanel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     public static final int REFRESH_RATE = 1000;
 
@@ -98,7 +100,6 @@ public class CPU_Usage extends OshiPanel {
     public static  void main(String[] args)
     {
         JFrame frame = new JFrame();
-        frame.setSize(1400, 800);
         SystemInfo si = new SystemInfo();
         frame.add(new CPU_Usage(si));
         frame.setVisible(true);
