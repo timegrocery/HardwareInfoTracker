@@ -1,8 +1,9 @@
 package BUS;
 
 import DTO.ListDTO;
+import Performance.CPU_Usage;
 import UI.*;
-import UI.Process;
+import Hardware.Process;
 import oshi.SystemInfo;
 
 import java.awt.*;
@@ -10,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.*;
+
+
 public class NavigationBUS {
     private JPanel root;
     private String kindSelected = "";
