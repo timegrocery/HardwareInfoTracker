@@ -5,6 +5,7 @@ import oshi.util.ExecutingCommand;
 import java.util.List;
 
 public class SendCommand {
+
     public static String SendCommand(String command) {
         List<String> cmdRet = ExecutingCommand.runNative(command);
         StringBuilder result = new StringBuilder();
