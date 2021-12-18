@@ -1,4 +1,4 @@
-package Performance;
+package UI;
 
 import java.awt.*;
 import java.io.Serial;
@@ -8,7 +8,6 @@ import java.util.Date;
 
 import javax.swing.*;
 
-import UI.OshiJPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

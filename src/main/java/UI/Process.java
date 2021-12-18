@@ -1,6 +1,5 @@
-package Hardware;
+package UI;
 
-import UI.OshiJPanel;
 import oshi.PlatformEnum;
 import oshi.SystemInfo;
 import oshi.software.os.OSProcess;

@@ -1,4 +1,4 @@
-package Performance;
+package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.*;
 
-import UI.OshiJPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -44,7 +43,7 @@ public class Disk_Usage extends OshiJPanel {
     private void init(FileSystem fs) {
         List<OSFileStore> fileStores = fs.getFileStores();
         @SuppressWarnings("unchecked")
-        DefaultPieDataset<String>[] fsData = new DefaultPieDataset[fileStores.size()];
+        DefaultPieDataset[] fsData = new DefaultPieDataset[fileStores.size()];
         JFreeChart[] fsCharts = new JFreeChart[fsData.length];
 
         JPanel fsPanel = new JPanel();
@@ -57,7 +56,7 @@ public class Disk_Usage extends OshiJPanel {
         int modBase = (int) (fileStores.size() * (GUI_HEIGHT + GUI_WIDTH)
                 / (GUI_WIDTH * Math.sqrt(fileStores.size())));
         for (int i = 0; i < fileStores.size(); i++) {
-            fsData[i] = new DefaultPieDataset<>();
+            fsData[i] = new DefaultPieDataset();
             fsCharts[i] = ChartFactory.createPieChart(null, fsData[i], true, true, false);
             configurePlot(fsCharts[i]);
             fsConstraints.gridx = i % modBase;
@@ -80,7 +79,7 @@ public class Disk_Usage extends OshiJPanel {
         timer.start();
     }
 
-    private static boolean updateDatasets(FileSystem fs, DefaultPieDataset<String>[] fsData, JFreeChart[] fsCharts) {
+    private static boolean updateDatasets(FileSystem fs, DefaultPieDataset[] fsData, JFreeChart[] fsCharts) {
         List<OSFileStore> fileStores = fs.getFileStores();
         if (fileStores.size() != fsData.length) {
             return false;
@@ -106,7 +105,7 @@ public class Disk_Usage extends OshiJPanel {
 
     private static void configurePlot(JFreeChart chart) {
         @SuppressWarnings("unchecked")
-        PiePlot<String> plot = (PiePlot<String>) chart.getPlot();
+        PiePlot plot = (PiePlot) chart.getPlot();
         plot.setSectionPaint(USED, Color.red);
         plot.setSectionPaint(AVAILABLE, Color.green);
         plot.setExplodePercent(USED, 0.10);
