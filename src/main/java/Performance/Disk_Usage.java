@@ -10,7 +10,7 @@ import java.util.List;
 
 import javax.swing.*;
 
-import UI.OshiPanel;
+import UI.OshiJPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -26,7 +26,7 @@ import oshi.software.os.FileSystem;
 import oshi.software.os.OSFileStore;
 import oshi.util.FormatUtil;
 
-public class Disk_Usage extends OshiPanel {
+public class Disk_Usage extends OshiJPanel {
     private static final long serialVersionUID = 1L;
 
     private static final String USED = "Used";
