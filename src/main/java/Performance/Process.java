@@ -1,6 +1,5 @@
-package Hardware;
+package Performance;
 
-import Performance.CPU_Usage;
 import UI.OshiPanel;
 import oshi.PlatformEnum;
 import oshi.SystemInfo;
@@ -173,6 +172,7 @@ public class Process extends OshiPanel {
     public  static  void main(String[] args)
     {
         JFrame frame = new JFrame();
+        frame.setSize(1400, 800);
         SystemInfo si = new SystemInfo();
         Process process = new Process(si);
 

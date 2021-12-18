@@ -14,6 +14,14 @@ public class SendCommand {
         return result.toString();
     }
 
+    public static String SendCommand_ShutDown() {
+        return SendCommand("shutdown /s /t 0");
+    }
+
+    public static String SendCommand_LogOff() {
+        return SendCommand("shutdown /h /t 0");
+    }
+
     public static void main(String[] args) {
         System.out.println(SendCommand("tasklist"));
     }

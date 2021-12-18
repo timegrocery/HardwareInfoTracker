@@ -98,6 +98,7 @@ public class CPU_Usage extends OshiPanel {
     public static  void main(String[] args)
     {
         JFrame frame = new JFrame();
+        frame.setSize(1400, 800);
         SystemInfo si = new SystemInfo();
         frame.add(new CPU_Usage(si));
         frame.setVisible(true);
