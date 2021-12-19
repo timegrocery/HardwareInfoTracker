@@ -27,7 +27,7 @@ public class NavigationBUS {
         jlbItem.setBackground (new Color (180,159,220));
         root.removeAll();
         root.setLayout(new BorderLayout());
-        root.add (new OsHwJPanel());
+        root.add (new OsHwJPanel(new SystemInfo()));
         root.validate();
         root.repaint ();
     }
@@ -53,8 +53,8 @@ public class NavigationBUS {
         @Override
         public void mousePressed(MouseEvent e) {
             switch (kind){
-                case "OS & HW Info" -> node = new OsHwJPanel();
-                case "Memory" -> node = new MemoryJPanel();
+                case "OS & HW Info" -> node = new OsHwJPanel(new SystemInfo());
+                case "Memory" -> node = new Memory(new SystemInfo());
                 case "CPU" -> node = new CPU_Usage(new SystemInfo());
                 case "Disk" -> node = new Disk_Usage(new SystemInfo());
                 case "Processes" -> node = new Process(new SystemInfo());
