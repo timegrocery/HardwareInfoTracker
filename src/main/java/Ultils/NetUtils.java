@@ -31,7 +31,6 @@ public class NetUtils {
                 packet.data.add(args[i]);
             }
         }
-
         return packet;
     }
 }
