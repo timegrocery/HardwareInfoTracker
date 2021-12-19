@@ -3,12 +3,16 @@ package Client;
 import Control.KeyLogger;
 import Control.SendCommand;
 import UI.CPU_Usage;
+import UI.Disk_Usage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.OSUtils;
 import Ultils.Packet;
+import java.util.List;
 import com.github.kwhat.jnativehook.NativeHookException;
 import oshi.SystemInfo;
+import oshi.software.os.FileSystem;
+import oshi.software.os.OSFileStore;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -62,6 +66,14 @@ public class ClientManager {
             }
             cpu_usage.init(si.getHardware().getProcessor(),received);
 
+        }
+
+        if (packet.action == MessageType.STORAGE_TRACK.getID()){
+            SystemInfo si = new SystemInfo();
+            FileSystem fs = si.getOperatingSystem().getFileSystem();
+            Disk_Usage disk_usage = new Disk_Usage(si);
+            List<OSFileStore> osFileStores = fs.getFileStores();
+            disk_usage.init(fs,osFileStores);
         }
 
         if (packet.action == MessageType.ALTF4.getID()) {

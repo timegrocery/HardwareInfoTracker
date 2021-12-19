@@ -1,10 +1,13 @@
 package Client;
 
 import UI.CPU_Usage;
+import UI.Disk_Usage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
 import oshi.SystemInfo;
+import oshi.software.os.FileSystem;
+import oshi.software.os.OSFileStore;
 
 import java.io.*;
 import java.net.Socket;
@@ -13,6 +16,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 public class Client {
     public static final int PORT = 1337;
@@ -106,10 +110,29 @@ public class Client {
         }
     }
 
-    private  void senProcUsage(){
+    private  void sendDiskUsage(PrintWriter pw, Socket s){
         SystemInfo si = new SystemInfo();
-        CPU_Usage cpu_usage = new CPU_Usage(si);
+        Disk_Usage disk_usage = new Disk_Usage(si);
 
+        try {
+            Packet packet = new Packet();
+            packet.action = MessageType.STORAGE_TRACK.getID();
+
+            FileSystem fs = si.getOperatingSystem().getFileSystem();
+            List<OSFileStore> osFileStores = fs.getFileStores();
+
+            List<String> result = null;
+
+            for (int i = 0; i < osFileStores.size(); ++i)
+            {
+                result.set(i, osFileStores.get(i).toString());
+            }
+
+            packet.data = result;
+            NetUtils.sendMessage(packet,pw);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static void startup() throws URISyntaxException, IOException {

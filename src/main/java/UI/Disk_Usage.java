@@ -37,11 +37,9 @@ public class Disk_Usage extends OshiJPanel {
 
     public Disk_Usage(SystemInfo si) {
         super();
-        init(si.getOperatingSystem().getFileSystem());
     }
 
-    private void init(FileSystem fs) {
-        List<OSFileStore> fileStores = fs.getFileStores();
+    public void init(FileSystem fs, List<OSFileStore> fileStores) {
         @SuppressWarnings("unchecked")
         DefaultPieDataset[] fsData = new DefaultPieDataset[fileStores.size()];
         JFreeChart[] fsCharts = new JFreeChart[fsData.length];
@@ -71,7 +69,7 @@ public class Disk_Usage extends OshiJPanel {
             if (!updateDatasets(fs, fsData, fsCharts)) {
                 ((Timer) e.getSource()).stop();
                 fsPanel.removeAll();
-                init(fs);
+                init(fs,fileStores);
                 fsPanel.revalidate();
                 fsPanel.repaint();
             }
@@ -119,13 +117,14 @@ public class Disk_Usage extends OshiJPanel {
     public static void main(String[] args)
     {
         SystemInfo si = new SystemInfo();
-        Disk_Usage disk = new Disk_Usage(si);
+        FileSystem fs = si.getOperatingSystem().getFileSystem();
 
-        JFrame frame = new JFrame();
-        frame.add(disk);
+        List<OSFileStore> fileStores = fs.getFileStores();
 
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        for (OSFileStore osFileStore : fileStores)
+        {
+            System.out.println(osFileStore.toString());
+        }
     }
 
 }

