@@ -66,7 +66,10 @@ public class ConnectedClient{
                     this.os = packet.data.get(0);
                     this.userName = packet.data.get(1);
                     Server.getInstance().getGUI().updateInfo();
-                } else if (packet.action == MessageType.DESKTOP.getID()) {
+                } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
+                    
+                }
+                else if (packet.action == MessageType.DESKTOP.getID()) {
                     if (desktop == null) {
                         desktop = new GuiDesktop(this);
                     }
