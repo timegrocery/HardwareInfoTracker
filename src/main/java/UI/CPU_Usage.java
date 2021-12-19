@@ -4,7 +4,9 @@ import java.awt.*;
 import java.io.Serial;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -78,19 +80,19 @@ public class CPU_Usage extends OshiJPanel {
         timer.start();
     }
 
-    private static float[] FloatArrayPercent(double d) {
+    public static float[] FloatArrayPercent(double d) {
         float[] f = new float[1];
         f[0] = (float) (100d * d);
         return f;
     }
 
-    private double cpuData(CentralProcessor proc) {
+    public double cpuData(CentralProcessor proc) {
         double d = proc.getSystemCpuLoadBetweenTicks(oldTicks);
         oldTicks = proc.getSystemCpuLoadTicks();
         return d;
     }
 
-    private double[] procData(CentralProcessor proc) {
+    public double[] procData(CentralProcessor proc) {
         double[] p = proc.getProcessorCpuLoadBetweenTicks(oldProcTicks);
         oldProcTicks = proc.getProcessorCpuLoadTicks();
         return p;
@@ -98,10 +100,14 @@ public class CPU_Usage extends OshiJPanel {
 
     public static  void main(String[] args)
     {
+        /*
         JFrame frame = new JFrame();
         SystemInfo si = new SystemInfo();
         frame.add(new CPU_Usage(si));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        */
     }
+
 }
+

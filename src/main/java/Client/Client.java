@@ -1,8 +1,10 @@
 package Client;
 
+import UI.CPU_Usage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
+import oshi.SystemInfo;
 
 import java.io.*;
 import java.net.Socket;
@@ -78,6 +80,36 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendCpuUsage(PrintWriter pw, Socket s)
+    {
+        SystemInfo si = new SystemInfo();
+        CPU_Usage cpu_usage = new CPU_Usage(si);
+        try {
+            Packet packet = new Packet();
+            packet.action = MessageType.PERFORMANCE_TRACK.getID();
+
+            double cpuResult = cpu_usage.cpuData(si.getHardware().getProcessor());
+            double[] procResult = cpu_usage.procData(si.getHardware().getProcessor());
+            String[] result = new String[procResult.length];
+
+            for (int i = 0; i < result.length; ++i){
+                result[i] = String.valueOf(procResult[i]);
+            }
+
+            packet.data = Arrays.asList(result);
+            packet.data.add(Double.toString(cpuResult));  // System usage is the first index TODO:this is stupid, need better
+            NetUtils.sendMessage(packet,pw);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private  void senProcUsage(){
+        SystemInfo si = new SystemInfo();
+        CPU_Usage cpu_usage = new CPU_Usage(si);
+
     }
 
     private static void startup() throws URISyntaxException, IOException {

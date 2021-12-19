@@ -20,6 +20,7 @@ import oshi.util.EdidUtil;
 
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 
 public class HW_Info {
@@ -82,5 +83,7 @@ public class HW_Info {
         System.out.println(UpdatePhysTitle(memory));
         System.out.println(UpdateVirtTitle(memory));
         System.out.println(GetHw(si));
+
+
     }
 }
