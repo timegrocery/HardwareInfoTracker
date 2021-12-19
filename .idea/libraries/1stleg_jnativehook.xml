@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="1stleg.jnativehook" type="repository">
+    <properties maven-id="com.1stleg:jnativehook:2.1.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jnativehook-2.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/jnativehook-2.1.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/jnativehook-2.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
