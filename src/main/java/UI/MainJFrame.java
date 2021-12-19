@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class MainJFrame extends javax.swing.JFrame {
     public MainJFrame() {
         initComponents();
-        
+        setTitle("Hardware Infomation Tracker");
         NavigationBUS nav = new NavigationBUS(jPnlContainer);
         nav.setView(jPnlOS, jLblOS);
         /* navigation bar*/
@@ -19,7 +19,7 @@ public class MainJFrame extends javax.swing.JFrame {
         listItem.add (new ListDTO ("OS & HW Info", jPnlOS, jLblOS));
         listItem.add (new ListDTO ("Memory", jPnlMemory, jLblMemory));
         listItem.add(new ListDTO("CPU",jPnlCPU,jLblCPU));
-        listItem.add(new ListDTO("FileStore",jPnlFileStore,jlblFS));
+        listItem.add(new ListDTO("Disk",jPnlFileStore,jlblFS));
         listItem.add(new ListDTO("Processes",jPnlProc,jLblProc));
         listItem.add(new ListDTO("USB Devices",jPnlUSB,jLblUSB));
         listItem.add(new ListDTO("Network",jPnlNetwork,jLblNetwork));
@@ -71,11 +71,11 @@ public class MainJFrame extends javax.swing.JFrame {
         );
         jPnlHeaderLayout.setVerticalGroup(
             jPnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 50, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPnlHeader);
-        jPnlHeader.setBounds(163, 0, 800, 100);
+        jPnlHeader.setBounds(163, 0, 800, 50);
 
         jPnlMenu.setBackground(new java.awt.Color(197, 235, 254));
 
@@ -140,14 +140,14 @@ public class MainJFrame extends javax.swing.JFrame {
         jPnlFileStore.setBackground(new java.awt.Color(180, 159, 220));
         jPnlFileStore.setPreferredSize(new java.awt.Dimension(119, 35));
 
-        jlblFS.setText("FileStore");
+        jlblFS.setText("Disk");
 
         javax.swing.GroupLayout jPnlFileStoreLayout = new javax.swing.GroupLayout(jPnlFileStore);
         jPnlFileStore.setLayout(jPnlFileStoreLayout);
         jPnlFileStoreLayout.setHorizontalGroup(
             jPnlFileStoreLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPnlFileStoreLayout.createSequentialGroup()
-                .addGap(57, 57, 57)
+                .addGap(69, 69, 69)
                 .addComponent(jlblFS)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -283,11 +283,11 @@ public class MainJFrame extends javax.swing.JFrame {
         );
         jPnlContainerLayout.setVerticalGroup(
             jPnlContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 430, Short.MAX_VALUE)
+            .addGap(0, 480, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPnlContainer);
-        jPnlContainer.setBounds(163, 95, 800, 430);
+        jPnlContainer.setBounds(163, 45, 800, 480);
 
         setBounds(0, 0, 975, 555);
     }// </editor-fold>//GEN-END:initComponents

@@ -1,10 +1,10 @@
 package BUS;
 
 import DTO.ListDTO;
-import Performance.CPU_Usage;
-import Performance.Disk_Usage;
+import UI.CPU_Usage;
+import UI.Disk_Usage;
 import UI.*;
-import Hardware.Process;
+import UI.Process;
 import oshi.SystemInfo;
 
 import java.awt.*;
@@ -56,7 +56,7 @@ public class NavigationBUS {
                 case "OS & HW Info" -> node = new OsHwJPanel();
                 case "Memory" -> node = new MemoryJPanel();
                 case "CPU" -> node = new CPU_Usage(new SystemInfo());
-                case "FileStore" -> node = new Disk_Usage(new SystemInfo());
+                case "Disk" -> node = new Disk_Usage(new SystemInfo());
                 case "Processes" -> node = new Process(new SystemInfo());
                 case "USB Devices" -> node = new USBDeviceJpanel();
                 case "Network" -> node = new NetworkJPanel();        
