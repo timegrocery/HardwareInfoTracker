@@ -4,17 +4,21 @@
  */
 package UI;
 
+import oshi.SystemInfo;
+import oshi.hardware.HardwareAbstractionLayer;
+import oshi.hardware.UsbDevice;
+
+import javax.swing.*;
+
 /**
  *
  * @author ADMIN
  */
 public class USBDeviceJpanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form USBDeviceJpanel
-     */
-    public USBDeviceJpanel() {
-        initComponents();
+    public static final int REFRESH_SLOW = 5000;
+    public USBDeviceJpanel(SystemInfo si) {
+        initComponents(si.getHardware());
         setEdiable(false);
     }
 
@@ -25,61 +29,80 @@ public class USBDeviceJpanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents(HardwareAbstractionLayer hal) {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        infjTextField = new javax.swing.JTextField();
+        jPnUSB = new javax.swing.JPanel();
+        jLblUSB = new javax.swing.JLabel();
+        jScrllPnUsb = new javax.swing.JScrollPane();
+        jtaUSB = new javax.swing.JTextArea();
 
         setRequestFocusEnabled(false);
 
-        jPanel1.setBackground(new java.awt.Color(161, 201, 241));
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 414));
+        jPnUSB.setBackground(new java.awt.Color(161, 201, 241));
+        jPnUSB.setPreferredSize(new java.awt.Dimension(800, 414));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("USB Devices");
+        jLblUSB.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLblUSB.setText("USB Devices");
 
-        jScrollPane1.setViewportView(infjTextField);
+        jtaUSB.setColumns(20);
+        jtaUSB.setRows(5);
+        jScrllPnUsb.setViewportView(jtaUSB);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPnUSBLayout = new javax.swing.GroupLayout(jPnUSB);
+        jPnUSB.setLayout(jPnUSBLayout);
+        jPnUSBLayout.setHorizontalGroup(
+            jPnUSBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPnUSBLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(jLblUSB)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(jScrllPnUsb, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPnUSBLayout.setVerticalGroup(
+            jPnUSBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPnUSBLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(jLblUSB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrllPnUsb, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPnUSB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+            .addComponent(jPnUSB, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
         );
+        Timer timer = new Timer(REFRESH_SLOW, e -> jtaUSB.setText(getUsbString(hal)));
+        timer.start();
     }// </editor-fold>//GEN-END:initComponents
- public void setEdiable(boolean flag){
-     infjTextField.setEditable(false);
- }
+
+    private static String getUsbString(HardwareAbstractionLayer hal) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (UsbDevice usbDevice : hal.getUsbDevices(true)) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append('\n');
+            }
+            sb.append(String.valueOf(usbDevice));
+        }
+        return sb.toString();
+    }
+
+    public void setEdiable(boolean flag){
+     jtaUSB.setEditable(false);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField infjTextField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLblUSB;
+    private javax.swing.JPanel jPnUSB;
+    private javax.swing.JScrollPane jScrllPnUsb;
+    private javax.swing.JTextArea jtaUSB;
     // End of variables declaration//GEN-END:variables
 }

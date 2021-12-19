@@ -33,8 +33,8 @@ public class Memory extends OshiJPanel { // NOSONAR squid:S110
     }
 
     private void init(GlobalMemory memory) {
-        DefaultPieDataset<String> physMemData = new DefaultPieDataset<>();
-        DefaultPieDataset<String> virtMemData = new DefaultPieDataset<>();
+        DefaultPieDataset physMemData = new DefaultPieDataset();
+        DefaultPieDataset virtMemData = new DefaultPieDataset();
         updateDatasets(memory, physMemData, virtMemData);
 
         JFreeChart physMem = ChartFactory.createPieChart(PHYSICAL_MEMORY, physMemData, true, true, false);
@@ -92,8 +92,8 @@ public class Memory extends OshiJPanel { // NOSONAR squid:S110
         return sb.toString();
     }
 
-    private static void updateDatasets(GlobalMemory memory, DefaultPieDataset<String> physMemData,
-                                       DefaultPieDataset<String> virtMemData) {
+    private static void updateDatasets(GlobalMemory memory, DefaultPieDataset physMemData,
+                                       DefaultPieDataset virtMemData) {
         physMemData.setValue(USED, (double) memory.getTotal() - memory.getAvailable());
         physMemData.setValue(AVAILABLE, memory.getAvailable());
 
@@ -104,7 +104,7 @@ public class Memory extends OshiJPanel { // NOSONAR squid:S110
 
     private static void configurePlot(JFreeChart chart) {
         @SuppressWarnings("unchecked")
-        PiePlot<String> plot = (PiePlot<String>) chart.getPlot();
+        PiePlot plot = (PiePlot) chart.getPlot();
         plot.setSectionPaint(USED, Color.red);
         plot.setSectionPaint(AVAILABLE, Color.green);
         plot.setExplodePercent(USED, 0.10);

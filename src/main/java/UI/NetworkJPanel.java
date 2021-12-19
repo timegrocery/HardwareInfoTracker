@@ -4,17 +4,33 @@
  */
 package UI;
 
+import oshi.SystemInfo;
+import oshi.hardware.NetworkIF;
+import oshi.software.os.NetworkParams;
+import oshi.software.os.OperatingSystem;
+import oshi.util.Constants;
+
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author ADMIN
  */
 public class NetworkJPanel extends javax.swing.JPanel {
 
-    /**
-     * Creates new form NetworkJPanel
-     */
-    public NetworkJPanel() {
-        initComponents();
+    private static final int INIT_HASH_SIZE = 100;
+    private static final String IP_ADDRESS_SEPARATOR = "; ";
+    private static final String PARAMS = "Network Parameters";
+    private static final String INTERFACES = "Network Interfaces";
+    private static final String[] COLUMNS = { "Name", "Index", "Speed", "IPv4 Address", "IPv6 address", "MAC address" };
+    private static final double[] COLUMN_WIDTH_PERCENT = { 0.02, 0.02, 0.1, 0.25, 0.45, 0.15 };
+    public NetworkJPanel(SystemInfo si) {
+        initComponents(si);
         setEdiable(false);
     }
 
@@ -25,100 +41,76 @@ public class NetworkJPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents(SystemInfo si) {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        infjTextField = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jPnNetwork = new javax.swing.JPanel();
+        jLbNPr = new javax.swing.JLabel();
+        jLbNI = new javax.swing.JLabel();
+        jScrllPnNI = new javax.swing.JScrollPane();
+        jTblNI = new javax.swing.JTable();
+        jScrllPnNPr = new javax.swing.JScrollPane();
+        jtaNPr = new javax.swing.JTextArea();
 
         setPreferredSize(new java.awt.Dimension(800, 480));
 
-        jPanel1.setBackground(new java.awt.Color(161, 201, 241));
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 414));
+        jPnNetwork.setBackground(new java.awt.Color(161, 201, 241));
+        jPnNetwork.setPreferredSize(new java.awt.Dimension(800, 414));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Network Parameter");
+        jLbNPr.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLbNPr.setText("Network Parameter");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Network Interfaces");
+        jLbNI.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLbNI.setText("Network Interfaces");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Name", "Index", "Speed", "IPv4 Address", "IPv6 Address", "MAC address"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                true, true, false, true, true, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(5);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(5);
-            jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(10);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(40);
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(70);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(60);
+        List<NetworkIF> networkIfList = si.getHardware().getNetworkIFs(true);
+        jTblNI.setModel(new javax.swing.table.DefaultTableModel(parseInterfaces(networkIfList), COLUMNS));
+        resizeColumns(jTblNI.getColumnModel());
+        jScrllPnNI.setViewportView(jTblNI);
+        if (jTblNI.getColumnModel().getColumnCount() > 0) {
+            jTblNI.getColumnModel().getColumn(0).setPreferredWidth(5);
+            jTblNI.getColumnModel().getColumn(1).setResizable(false);
+            jTblNI.getColumnModel().getColumn(1).setPreferredWidth(5);
+            jTblNI.getColumnModel().getColumn(2).setResizable(false);
+            jTblNI.getColumnModel().getColumn(2).setPreferredWidth(10);
+            jTblNI.getColumnModel().getColumn(3).setResizable(false);
+            jTblNI.getColumnModel().getColumn(3).setPreferredWidth(40);
+            jTblNI.getColumnModel().getColumn(4).setResizable(false);
+            jTblNI.getColumnModel().getColumn(4).setPreferredWidth(70);
+            jTblNI.getColumnModel().getColumn(5).setPreferredWidth(60);
         }
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(infjTextField)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+        jtaNPr.setColumns(20);
+        jtaNPr.setRows(5);
+        jtaNPr.setText(buildParamsText(si.getOperatingSystem()));
+        jScrllPnNPr.setViewportView(jtaNPr);
+
+        javax.swing.GroupLayout jPnNetworkLayout = new javax.swing.GroupLayout(jPnNetwork);
+        jPnNetwork.setLayout(jPnNetworkLayout);
+        jPnNetworkLayout.setHorizontalGroup(
+            jPnNetworkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrllPnNI, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addGroup(jPnNetworkLayout.createSequentialGroup()
+                .addGroup(jPnNetworkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPnNetworkLayout.createSequentialGroup()
                         .addGap(332, 332, 332)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLbNPr))
+                    .addGroup(jPnNetworkLayout.createSequentialGroup()
                         .addGap(328, 328, 328)
-                        .addComponent(jLabel2)))
+                        .addComponent(jLbNI)))
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+            .addComponent(jScrllPnNPr)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPnNetworkLayout.setVerticalGroup(
+            jPnNetworkLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPnNetworkLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(jLabel1)
+                .addComponent(jLbNPr)
+                .addGap(6, 6, 6)
+                .addComponent(jScrllPnNPr, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(infjTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLbNI)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrllPnNI, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -126,23 +118,88 @@ public class NetworkJPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPnNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, Short.MAX_VALUE)
+            .addComponent(jPnNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, 480, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
- public void setEdiable(boolean flag){
-     infjTextField.setEditable(false);
- }
+    public void setEdiable(boolean flag){
+        jtaNPr.setEditable(false);
+    }
 
+    private static String buildParamsText(OperatingSystem os) {
+        NetworkParams params = os.getNetworkParams();
+        StringBuilder sb = new StringBuilder("Host Name: ").append(params.getHostName());
+        if (!params.getDomainName().isEmpty()) {
+            sb.append("\nDomain Name: ").append(params.getDomainName());
+        }
+        sb.append("\nIPv4 Default Gateway: ").append(params.getIpv4DefaultGateway());
+        if (!params.getIpv6DefaultGateway().isEmpty()) {
+            sb.append("\nIPv6 Default Gateway: ").append(params.getIpv6DefaultGateway());
+        }
+        sb.append("\nDNS Servers: ").append(getIPAddressesString(params.getDnsServers()));
+        return sb.toString();
+    }
+
+    private static Object[][] parseInterfaces(List<NetworkIF> list) {
+        Map<NetworkIF, Integer> intfSortValueMap = new HashMap<>(INIT_HASH_SIZE);
+        for (NetworkIF intf : list) {
+            intfSortValueMap.put(intf, intf.getIndex());
+        }
+        List<Map.Entry<NetworkIF, Integer>> intfList = new ArrayList<>(intfSortValueMap.entrySet());
+        intfList.sort(Map.Entry.comparingByValue());
+
+        int i = 0;
+        Object[][] intfArr = new Object[intfList.size()][COLUMNS.length];
+
+        for (Map.Entry<NetworkIF, Integer> e : intfList) {
+            NetworkIF intf = e.getKey();
+
+            intfArr[i][0] = intf.getName();
+            intfArr[i][1] = intf.getIndex();
+            intfArr[i][2] = intf.getSpeed();
+            intfArr[i][3] = getIPAddressesString(intf.getIPv4addr());
+            intfArr[i][4] = getIPAddressesString(intf.getIPv6addr());
+            intfArr[i][5] = Constants.UNKNOWN.equals(intf.getMacaddr()) ? "" : intf.getMacaddr();
+            i++;
+        }
+        return intfArr;
+    }
+
+    private static void resizeColumns(TableColumnModel tableColumnModel) {
+        TableColumn column;
+        int tW = tableColumnModel.getTotalColumnWidth();
+        int cantCols = tableColumnModel.getColumnCount();
+        for (int i = 0; i < cantCols; i++) {
+            column = tableColumnModel.getColumn(i);
+            int pWidth = (int) Math.round(COLUMN_WIDTH_PERCENT[i] * tW);
+            column.setPreferredWidth(pWidth);
+        }
+    }
+
+    private static String getIPAddressesString(String[] ipAddressArr) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+
+        for (String ipAddress : ipAddressArr) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append(IP_ADDRESS_SEPARATOR);
+            }
+            sb.append(ipAddress);
+        }
+        return sb.toString();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField infjTextField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel jLbNI;
+    private javax.swing.JLabel jLbNPr;
+    private javax.swing.JPanel jPnNetwork;
+    private javax.swing.JScrollPane jScrllPnNI;
+    private javax.swing.JScrollPane jScrllPnNPr;
+    private javax.swing.JTable jTblNI;
+    private javax.swing.JTextArea jtaNPr;
     // End of variables declaration//GEN-END:variables
 }

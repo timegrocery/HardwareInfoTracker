@@ -58,8 +58,8 @@ public class NavigationBUS {
                 case "CPU" -> node = new CPU_Usage(new SystemInfo());
                 case "Disk" -> node = new Disk_Usage(new SystemInfo());
                 case "Processes" -> node = new Process(new SystemInfo());
-                case "USB Devices" -> node = new USBDeviceJpanel();
-                case "Network" -> node = new NetworkJPanel();        
+                case "USB Devices" -> node = new USBDeviceJpanel(new SystemInfo());
+                case "Network" -> node = new NetworkJPanel(new SystemInfo());
                     
             default -> {
                 }

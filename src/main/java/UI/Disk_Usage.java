@@ -27,7 +27,6 @@ import oshi.util.FormatUtil;
 
 public class Disk_Usage extends OshiJPanel {
     private static final long serialVersionUID = 1L;
-
     private static final String USED = "Used";
     private static final String AVAILABLE = "Available";
     public static final int GUI_WIDTH = 800;
@@ -37,9 +36,11 @@ public class Disk_Usage extends OshiJPanel {
 
     public Disk_Usage(SystemInfo si) {
         super();
+        init(si.getOperatingSystem().getFileSystem());
     }
 
-    public void init(FileSystem fs, List<OSFileStore> fileStores) {
+    public void init(FileSystem fs) {
+        List<OSFileStore> fileStores = fs.getFileStores();
         @SuppressWarnings("unchecked")
         DefaultPieDataset[] fsData = new DefaultPieDataset[fileStores.size()];
         JFreeChart[] fsCharts = new JFreeChart[fsData.length];
@@ -69,7 +70,7 @@ public class Disk_Usage extends OshiJPanel {
             if (!updateDatasets(fs, fsData, fsCharts)) {
                 ((Timer) e.getSource()).stop();
                 fsPanel.removeAll();
-                init(fs,fileStores);
+                init(fs);
                 fsPanel.revalidate();
                 fsPanel.repaint();
             }
@@ -116,15 +117,15 @@ public class Disk_Usage extends OshiJPanel {
 
     public static void main(String[] args)
     {
-        SystemInfo si = new SystemInfo();
-        FileSystem fs = si.getOperatingSystem().getFileSystem();
-
-        List<OSFileStore> fileStores = fs.getFileStores();
-
-        for (OSFileStore osFileStore : fileStores)
-        {
-            System.out.println(osFileStore.toString());
-        }
+//        SystemInfo si = new SystemInfo();
+//        FileSystem fs = si.getOperatingSystem().getFileSystem();
+//
+//        List<OSFileStore> fileStores = fs.getFileStores();
+//
+//        for (OSFileStore osFileStore : fileStores)
+//        {
+//            System.out.println(osFileStore.toString());
+//        }
     }
 
 }

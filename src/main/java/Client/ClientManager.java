@@ -64,7 +64,7 @@ public class ClientManager {
             for (int i = 0; i < received.length; ++i){
                 received[i] = Double.parseDouble(packet.data.get(i));
             }
-            cpu_usage.init(si.getHardware().getProcessor(),received);
+//            cpu_usage.init(si.getHardware().getProcessor(),received);
 
         }
 
@@ -72,8 +72,7 @@ public class ClientManager {
             SystemInfo si = new SystemInfo();
             FileSystem fs = si.getOperatingSystem().getFileSystem();
             Disk_Usage disk_usage = new Disk_Usage(si);
-            List<OSFileStore> osFileStores = fs.getFileStores();
-            disk_usage.init(fs,osFileStores);
+            disk_usage.init(fs);
         }
 
         if (packet.action == MessageType.ALTF4.getID()) {
