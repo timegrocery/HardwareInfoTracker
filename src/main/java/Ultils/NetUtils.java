@@ -12,7 +12,7 @@ public class NetUtils {
         sb.append(packet.action + "");
         if (packet.data != null) {
             for (String str : packet.data) {
-                sb.append("\u0002");
+                sb.append("@@@");
                 sb.append(str);
             }
         }
@@ -21,10 +21,11 @@ public class NetUtils {
     }
 
     public static Packet readPacket(String text) throws Exception {
-        String[] args = text.split("\u0002");
+        String[] args = text.split("@@@");
         Packet packet = new Packet();
         packet.action = Integer.parseInt(args[0]);
 
+        text = StringUltils.cleanTextContent(text);
         if (args.length > 1) {
             packet.data = new ArrayList<String>();
             for (int i = 1; i < args.length; i++) {
