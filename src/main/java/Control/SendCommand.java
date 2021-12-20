@@ -1,28 +1,61 @@
 package Control;
 
-import oshi.util.ExecutingCommand;
-
-import java.util.List;
+import java.io.*;
 
 public class SendCommand {
 
+    public static void SendCommand_ShutDown() {
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process proc = runtime.exec("shutdown -s -t 0");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+
+    public static void SenCommand_LogOff() {
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process proc = runtime.exec("shutdown -h -t 0");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }
+
     public static String SendCommand(String command) {
-        List<String> cmdRet = ExecutingCommand.runNative(command);
+        Runtime rt = Runtime.getRuntime();
+        String[] commands = {command};
         StringBuilder result = new StringBuilder();
-        for(String s : cmdRet) {
-            result.append(String.format("%s\n",s));
+        try {
+            Process proc = rt.exec(commands);
+
+            BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(proc.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(proc.getErrorStream()));
+            String s = null;
+            while ((s = stdInput.readLine()) != null) {
+                result.append(s).append("\n");
+            }
+
+            while ((s = stdError.readLine()) != null) {
+                result.append(s).append("\n");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Failed to execute a command");
+            return "Unknown command";
         }
         return result.toString();
     }
 
-    public static String SendCommand_ShutDown() {
-        return SendCommand("shutdown /s /t 0");
-    }
-
-    public static String SenCommand_LogOff() {
-        return SendCommand("shutdown /h /t 0");
-    }
     public static void main(String[] args) {
-        System.out.println(SendCommand("tasklist"));
+
+        System.out.println(SendCommand("test"));
     }
 }

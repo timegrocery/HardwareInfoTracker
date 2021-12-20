@@ -103,6 +103,20 @@ public class ClientManager {
             } catch (Exception npe) {
                 npe.printStackTrace();
             }
+        } else if (packet.action == MessageType.COMMAND.getID()) {
+            try {
+                System.out.println(packet.data);
+                String result = Control.SendCommand.SendCommand(packet.data.get(1));
+                Packet commandPacket = new Packet();
+                commandPacket.action = MessageType.COMMAND.getID();
+                commandPacket.data = new ArrayList<String>();
+                commandPacket.data.add("return");
+                commandPacket.data.add(result);
+                commandPacket.data.add("eof");
+                NetUtils.sendMessage(commandPacket, pw);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else if (packet.action == MessageType.DESKTOP.getID()) {
             try {
                 if (packet.data.get(0).equals("start")) {
@@ -129,12 +143,11 @@ public class ClientManager {
                 e.printStackTrace();
             }
         } else if (packet.action == MessageType.SHUTDOWN.getID()) {
-            try {
-                SendCommand.SendCommand_ShutDown();
-                System.exit(0);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            SendCommand.SendCommand_ShutDown();
+            System.out.println("Client shutting down");
+        } else if (packet.action == MessageType.LOGOFF.getID()) {
+            SendCommand.SenCommand_LogOff();
+            System.out.println("Client logging off");
         }
     }
 
@@ -192,7 +205,7 @@ public class ClientManager {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Sleep interrupted while recording");
             } catch (ThreadDeath dt) {}
         }
         if (temp.exists()) {

