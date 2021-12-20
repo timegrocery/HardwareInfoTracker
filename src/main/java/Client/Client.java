@@ -103,7 +103,9 @@ public class Client {
             }
 
             packet.data = Arrays.asList(result);
-            packet.data.add(Double.toString(cpuResult));  // System usage is the first index TODO:this is stupid, need better
+
+            //TODO:this is stupid, need better solution
+            packet.data.add(Double.toString(cpuResult));  // System usage is the first index
             NetUtils.sendMessage(packet,pw);
         } catch (Exception e){
             e.printStackTrace();
