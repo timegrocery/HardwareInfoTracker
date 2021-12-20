@@ -58,13 +58,11 @@ public class ClientManager {
         if (packet.action == MessageType.PERFORMANCE_TRACK.getID()){
 
             SystemInfo si = new SystemInfo();
-            CPU_Usage cpu_usage = new CPU_Usage(si);
             double[] received = new double[packet.data.size()];
 
             for (int i = 0; i < received.length; ++i){
                 received[i] = Double.parseDouble(packet.data.get(i));
             }
-            cpu_usage.init(si.getHardware().getProcessor(),received);
 
         }
 
