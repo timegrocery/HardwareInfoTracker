@@ -11,6 +11,7 @@ import Ultils.NetUtils;
 import Ultils.Packet;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -33,6 +34,7 @@ public class GuiCommand extends javax.swing.JFrame {
         setTitle(client.getUsername() + " Command Prompt");
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         initComponents();
+        this.setResizable(false);
     }
 
     /**
@@ -47,10 +49,13 @@ public class GuiCommand extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jTextArea1.setLineWrap(true);
+        jTextArea1.setPreferredSize(new Dimension(700, 700));
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        jTextPane1.setPreferredSize(new Dimension(700, 40));
         jButton1 = new javax.swing.JButton();
+        jButton1.setPreferredSize(new Dimension(100, 40));
         jButton1.setText("Send");
         jTextArea1.setText("");
         jButton1.addMouseListener(new MouseAdapter() {
@@ -78,8 +83,10 @@ public class GuiCommand extends javax.swing.JFrame {
         jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
+        jTextArea1.setColumns(25);
+        jTextArea1.setRows(9999);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextArea1);
 
         jScrollPane2.setViewportView(jTextPane1);

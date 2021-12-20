@@ -41,13 +41,12 @@ public class SendCommand {
                     InputStreamReader(proc.getErrorStream()));
             String s = null;
             while ((s = stdInput.readLine()) != null) {
-                s = StringUltils.NormalizeSpaces(s);
                 s = StringUltils.cleanTextContent(s);
-                result.append(s);//.append("\n");
+                result.append(s).append("@@@&&&");
             }
 
             while ((s = stdError.readLine()) != null) {
-                result.append(s);//.append("\n");
+                result.append(s).append("@@@&&&");
             }
 
         } catch (Exception e) {
