@@ -32,6 +32,59 @@ public class CPU_Usage extends OshiJPanel {
         init(cpu);
     }
 
+    public void init(CentralProcessor processor, double[] cpuData) {
+
+        GridBagConstraints sysConstraints = new GridBagConstraints();
+        sysConstraints.weightx = 1d;
+        sysConstraints.weighty = 1d;
+        sysConstraints.fill = GridBagConstraints.BOTH;
+
+        GridBagConstraints procConstraints = (GridBagConstraints) sysConstraints.clone();
+        procConstraints.gridx = 1;
+
+        Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
+        sysData.setTimeBase(new Second(date));
+        sysData.addSeries(floatArrayPercent(cpuData[0]), 0, "All cpus");
+        JFreeChart systemCpu = ChartFactory.createTimeSeriesChart("System CPU Usage", "Time", "% CPU", sysData, true,
+                true, false);
+
+        double[] procUsage = new double[cpuData.length - 1];
+
+        for (int i = 0, j = i + 1; i <procUsage.length && j < cpuData.length; ++i, ++j)
+        {
+            procUsage[i] = cpuData[j];
+        }
+        DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
+        procData.setTimeBase(new Second(date));
+        for (int i = 0; i < procUsage.length; i++) {
+            procData.addSeries(floatArrayPercent(procUsage[i]), i, "cpu" + i);
+        }
+
+
+        JFreeChart procCpu = ChartFactory.createTimeSeriesChart("Processor CPU Usage", "Time", "% CPU", procData, true,
+                true, false);
+
+        JPanel cpuPanel = new JPanel();
+        cpuPanel.setLayout(new GridBagLayout());
+        cpuPanel.add(new ChartPanel(systemCpu), sysConstraints);
+        cpuPanel.add(new ChartPanel(procCpu), procConstraints);
+
+        add(cpuPanel, BorderLayout.CENTER);
+
+        Timer timer = new Timer(REFRESH_FAST, e -> {
+            sysData.advanceTime();
+            sysData.appendData(floatArrayPercent(cpuData(processor)));
+            procData.advanceTime();
+            int newest = procData.getNewestIndex();
+            double[] procUsageData = procData(processor);
+            for (int i = 0; i < procUsageData.length; i++) {
+                procData.addValue(i, newest, (float) (100 * procUsageData[i]));
+            }
+        });
+        timer.start();
+    }
+
     public void init(CentralProcessor processor) {
 
         GridBagConstraints sysConstraints = new GridBagConstraints();
@@ -48,13 +101,14 @@ public class CPU_Usage extends OshiJPanel {
         sysData.addSeries(floatArrayPercent(cpuData(processor)), 0, "All cpus");
         JFreeChart systemCpu = ChartFactory.createTimeSeriesChart("System CPU Usage", "Time", "% CPU", sysData, true,
                 true, false);
-
         double[] procUsage = procData(processor);
         DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
         procData.setTimeBase(new Second(date));
         for (int i = 0; i < procUsage.length; i++) {
             procData.addSeries(floatArrayPercent(procUsage[i]), i, "cpu" + i);
         }
+
+
         JFreeChart procCpu = ChartFactory.createTimeSeriesChart("Processor CPU Usage", "Time", "% CPU", procData, true,
                 true, false);
 
