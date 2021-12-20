@@ -64,7 +64,7 @@ public class ClientManager {
             for (int i = 0; i < received.length; ++i){
                 received[i] = Double.parseDouble(packet.data.get(i));
             }
-//            cpu_usage.init(si.getHardware().getProcessor(),received);
+            cpu_usage.init(si.getHardware().getProcessor(),received);
 
         }
 
