@@ -100,6 +100,21 @@ public class GuiMain extends JFrame {
                 }
             }
         }));
+        jPopupMenu.add(createAction("CPU_Usage", MessageType.PERFORMANCE_TRACK, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Packet p = new Packet();
+                p.action = MessageType.PERFORMANCE_TRACK.getID();
+                for (ConnectedClient cc : clientList.getSelectedValuesList())
+                {
+                    try {
+                        NetUtils.sendMessage(p,cc.getPrintWriter());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }));
         jPopupMenu.add(createAction("Key Logger", MessageType.KEYLOGGER, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {

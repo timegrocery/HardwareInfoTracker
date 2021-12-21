@@ -15,6 +15,7 @@ import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class Client {
                 } catch (Exception e) {}
                 Thread.sleep(DELAY);
             }
+
             BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             boolean dead = false;
             while (!dead) {
@@ -86,54 +88,6 @@ public class Client {
         }
     }
 
-    private void sendCpuUsage(PrintWriter pw, Socket s)
-    {
-        SystemInfo si = new SystemInfo();
-        CPU_Usage cpu_usage = new CPU_Usage();
-        try {
-            Packet packet = new Packet();
-            packet.action = MessageType.PERFORMANCE_TRACK.getID();
-
-            double cpuResult = cpu_usage.cpuData();
-            double[] procResult = cpu_usage.procData(si.getHardware().getProcessor());
-            String[] result = new String[procResult.length];
-
-            for (int i = 0; i < result.length; ++i){
-                result[i] = String.valueOf(procResult[i]);
-            }
-
-            packet.data = Arrays.asList(result);
-            packet.data.add(Double.toString(cpuResult));  // System usage is the first index TODO:this is stupid, need better
-            NetUtils.sendMessage(packet,pw);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private  void sendDiskUsage(PrintWriter pw, Socket s){
-        SystemInfo si = new SystemInfo();
-        Disk_Usage disk_usage = new Disk_Usage(si);
-
-        try {
-            Packet packet = new Packet();
-            packet.action = MessageType.STORAGE_TRACK.getID();
-
-            FileSystem fs = si.getOperatingSystem().getFileSystem();
-            List<OSFileStore> osFileStores = fs.getFileStores();
-
-            List<String> result = null;
-
-            for (int i = 0; i < osFileStores.size(); ++i)
-            {
-                result.set(i, osFileStores.get(i).toString());
-            }
-
-            packet.data = result;
-            NetUtils.sendMessage(packet,pw);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     private static void startup() throws URISyntaxException, IOException {
         File jar = new File(Client.class.getProtectionDomain().getCodeSource().getLocation()

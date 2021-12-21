@@ -10,6 +10,7 @@ import Ultils.OSUtils;
 import Ultils.Packet;
 import java.util.List;
 import com.github.kwhat.jnativehook.NativeHookException;
+import org.jfree.data.time.DynamicTimeSeriesCollection;
 import oshi.SystemInfo;
 import oshi.software.os.FileSystem;
 import oshi.software.os.OSFileStore;
@@ -37,8 +38,11 @@ public class ClientManager {
     // Desktop
     private Thread desktop;
     private boolean runningDesktop;
+
     private float compression = 0.4F;
 
+    private Thread cpuUsage;
+    private boolean trackingCPU;
     // Webcam
     private Thread webcam;
     private boolean runningWebcam;
@@ -56,24 +60,15 @@ public class ClientManager {
         }
 
         if (packet.action == MessageType.PERFORMANCE_TRACK.getID()){
-
-            SystemInfo si = new SystemInfo();
-            double[] received = new double[packet.data.size()];
-
-            for (int i = 0; i < received.length; ++i){
-                received[i] = Double.parseDouble(packet.data.get(i));
-            }
-
+            System.out.println("Received from server:" + packet.data);
+            sendCpuUsage(pw);
         }
 
-        if (packet.action == MessageType.STORAGE_TRACK.getID()){
-            SystemInfo si = new SystemInfo();
-            FileSystem fs = si.getOperatingSystem().getFileSystem();
-            Disk_Usage disk_usage = new Disk_Usage(si);
-            disk_usage.init(fs);
+        else if (packet.action == MessageType.STORAGE_TRACK.getID()){
+           System.out.println("Storage Track");
         }
 
-        if (packet.action == MessageType.ALTF4.getID()) {
+        else if (packet.action == MessageType.ALTF4.getID()) {
             try {
                 Robot r = new Robot();
                 r.keyPress(KeyEvent.VK_ALT);
@@ -149,6 +144,38 @@ public class ClientManager {
         }
     }
 
+    private static void sendCpuUsage(PrintWriter pw)
+    {
+        SystemInfo si = new SystemInfo();
+        CPU_Usage cpu_usage = new CPU_Usage(si);
+        try {
+            Packet packet = new Packet();
+            packet.action = MessageType.PERFORMANCE_TRACK.getID();
+
+            DynamicTimeSeriesCollection[] cpuTimeSeries = cpu_usage.CreateTimeSeries(si.getHardware().getProcessor());
+
+            Number cpuResult = cpuTimeSeries[0].getX(0,0);
+            Number[] procResult = new Number[cpuTimeSeries[1].getItemCount(0)];
+
+                for (int j = 0; j < cpuTimeSeries[1].getItemCount(0); ++j)
+                {
+                    procResult[j] = cpuTimeSeries[1].getX(0,j);
+                }
+
+            packet.data = new ArrayList<>();
+
+            packet.data.add(String.valueOf(cpuResult));
+
+            for (int i = 0; i < procResult.length; ++i) {
+                packet.data.add(String.valueOf(procResult[i]));
+            }
+
+            NetUtils.sendMessage(packet,pw);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     private void downloadUsingStream(String urlStr, File file) throws IOException {
         URL url = new URL(urlStr);
         BufferedInputStream bis = new BufferedInputStream(url.openStream());
@@ -217,5 +244,11 @@ public class ClientManager {
 
     public String getSeparator() {
         return "|}";
+    }
+
+    public  static  void main(String[] args)
+    {
+        PrintWriter pw = null;
+        sendCpuUsage(pw);
     }
 }
