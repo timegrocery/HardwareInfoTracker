@@ -183,23 +183,17 @@ public class ClientManager {
             Packet packet = new Packet();
             packet.action = MessageType.PERFORMANCE_TRACK.getID();
 
-            DynamicTimeSeriesCollection[] cpuTimeSeries = cpu_usage.CreateTimeSeries(si);
-
-            Number cpuResult = cpuTimeSeries[0].getX(0,0);
-            Number[] procResult = new Number[cpuTimeSeries[1].getItemCount(0)];
-
-                for (int j = 0; j < cpuTimeSeries[1].getItemCount(0); ++j)
-                {
-                    procResult[j] = cpuTimeSeries[1].getX(0,j);
-                }
+            double cpuData = cpu_usage.cpuData(si.getHardware().getProcessor());
+            double[] procData = cpu_usage.procData(si.getHardware().getProcessor());
 
             packet.data = new ArrayList<>();
 
-            packet.data.add(String.valueOf(cpuResult));
-
-            for (int i = 0; i < procResult.length; ++i) {
-                packet.data.add(String.valueOf(procResult[i]));
+            for (int i = 0; i < procData.length; ++i)
+            {
+                packet.data.add(String.valueOf(procData[i] * 100));
             }
+
+            packet.data.add(String.valueOf(cpuData * 100));
 
             NetUtils.sendMessage(packet,pw);
         } catch (Exception e){

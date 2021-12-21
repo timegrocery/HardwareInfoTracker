@@ -78,34 +78,12 @@ public class ConnectedClient{
                     Server.getInstance().getGUI().updateInfo();
 
                 } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
-                    //System.out.println(packet.data);
+                    System.out.println(packet.data);
                     if (cpu == null) {
                         cpu = new GuiCPU(this);
                     }
                     if (this.cpu.isActive()) {
-                        Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
-                        connectedTimeSeries[0] = new DynamicTimeSeriesCollection(1, 60, new Second());
-                        connectedTimeSeries[0].setTimeBase(new Second(date));
-                        connectedTimeSeries[0].addSeries(CPU_Usage.floatArrayPercent(Double.parseDouble(packet.data.get(0))),0, "All cpu");
-
-                        double[] procUsage = new double[packet.data.size() - 1];
-                        for (int i = 0; i < procUsage.length; ++i)
-                        {
-                            procUsage[i] = Double.parseDouble(packet.data.get(i + 1));
-                            System.out.println(procUsage[i]);
-                        }
-
-                        connectedTimeSeries[1] = new DynamicTimeSeriesCollection(16, 60, new Second());
-                        connectedTimeSeries[1].setTimeBase(new Second(date));
-
-                        for (int i = 0; i < connectedTimeSeries[1].getSeriesCount(); i++) {
-                            connectedTimeSeries[1].addSeries(CPU_Usage.floatArrayPercent(procUsage[i]), i, "cpu" + i);
-                        }
-
-                        DynamicTimeSeriesCollection[] result = new DynamicTimeSeriesCollection[2];
-                        result[0] = connectedTimeSeries[0];
-                        result[1] = connectedTimeSeries[1];
-                        cpu.SetCpuUsage(result);
+                       System.out.println(packet.data);
                     }
 
 
