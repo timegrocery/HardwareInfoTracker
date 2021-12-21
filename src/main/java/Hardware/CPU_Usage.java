@@ -87,12 +87,14 @@ public class CPU_Usage {
     }
 
     public double cpuData(CentralProcessor proc, long[] oldTicks) {
+        oldTicks = new long[CentralProcessor.TickType.values().length];
         double d = proc.getSystemCpuLoadBetweenTicks(oldTicks);
         oldTicks = proc.getSystemCpuLoadTicks();
         return d;
     }
 
     public double[] procData(CentralProcessor proc, long[][] oldProcTicks) {
+        oldProcTicks = new long[proc.getLogicalProcessorCount()][CentralProcessor.TickType.values().length];
         double[] p = proc.getProcessorCpuLoadBetweenTicks(oldProcTicks);
         oldProcTicks = proc.getProcessorCpuLoadTicks();
         return p;
