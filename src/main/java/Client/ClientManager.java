@@ -2,7 +2,7 @@ package Client;
 
 import Control.KeyLogger;
 import Control.SendCommand;
-import UI.CPU_Usage;
+import Hardware.CPU_Usage;
 import UI.Disk_Usage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
@@ -147,12 +147,12 @@ public class ClientManager {
     private static void sendCpuUsage(PrintWriter pw)
     {
         SystemInfo si = new SystemInfo();
-        CPU_Usage cpu_usage = new CPU_Usage(si);
+        Hardware.CPU_Usage cpu_usage = new CPU_Usage(si);
         try {
             Packet packet = new Packet();
             packet.action = MessageType.PERFORMANCE_TRACK.getID();
 
-            DynamicTimeSeriesCollection[] cpuTimeSeries = cpu_usage.CreateTimeSeries();
+            DynamicTimeSeriesCollection[] cpuTimeSeries = cpu_usage.CreateTimeSeries(si.getHardware().getProcessor());
 
             Number cpuResult = cpuTimeSeries[0].getX(0,0);
             Number[] procResult = new Number[cpuTimeSeries[1].getItemCount(0)];
