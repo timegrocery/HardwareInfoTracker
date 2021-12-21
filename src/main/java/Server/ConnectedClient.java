@@ -92,6 +92,7 @@ public class ConnectedClient{
                         for (int i = 0; i < procUsage.length; ++i)
                         {
                             procUsage[i] = Double.parseDouble(packet.data.get(i + 1));
+                            System.out.println(procUsage[i]);
                         }
 
                         connectedTimeSeries[1] = new DynamicTimeSeriesCollection(16, 60, new Second());
