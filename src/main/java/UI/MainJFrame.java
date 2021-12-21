@@ -59,6 +59,7 @@ public class MainJFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(0, 153, 255));
+        setResizable(false);
         getContentPane().setLayout(null);
 
         jPnlHeader.setBackground(new java.awt.Color(197, 235, 254));
