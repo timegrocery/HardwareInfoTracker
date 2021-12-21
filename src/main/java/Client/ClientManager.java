@@ -152,7 +152,7 @@ public class ClientManager {
             Packet packet = new Packet();
             packet.action = MessageType.PERFORMANCE_TRACK.getID();
 
-            DynamicTimeSeriesCollection[] cpuTimeSeries = cpu_usage.CreateTimeSeries(si.getHardware().getProcessor());
+            DynamicTimeSeriesCollection[] cpuTimeSeries = cpu_usage.CreateTimeSeries();
 
             Number cpuResult = cpuTimeSeries[0].getX(0,0);
             Number[] procResult = new Number[cpuTimeSeries[1].getItemCount(0)];
