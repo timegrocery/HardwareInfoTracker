@@ -27,7 +27,7 @@ public class GuiCPU extends javax.swing.JFrame {
     public GuiCPU(@NotNull ConnectedClient client) {
         this.client = client;
         frame = new JFrame();
-        cpuPanel = new CPU_Usage(client.connectedTimeSeries);
+        cpuPanel = new CPU_Usage();
         cpuPanel.setSize(new Dimension(1800,800));
         contentPane = new JPanel();
         contentPane.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
