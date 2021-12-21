@@ -89,12 +89,12 @@ public class Client {
     private void sendCpuUsage(PrintWriter pw, Socket s)
     {
         SystemInfo si = new SystemInfo();
-        CPU_Usage cpu_usage = new CPU_Usage(si);
+        CPU_Usage cpu_usage = new CPU_Usage();
         try {
             Packet packet = new Packet();
             packet.action = MessageType.PERFORMANCE_TRACK.getID();
 
-            double cpuResult = cpu_usage.cpuData(si.getHardware().getProcessor());
+            double cpuResult = cpu_usage.cpuData();
             double[] procResult = cpu_usage.procData(si.getHardware().getProcessor());
             String[] result = new String[procResult.length];
 

