@@ -9,6 +9,7 @@ import Ultils.Packet;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.jfree.data.time.DynamicTimeSeriesCollection;
 import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -36,6 +37,9 @@ public class ClientManager {
 
     private Thread cpuUsage;
     private boolean trackingCPU;
+
+    public static long[] oldTicks;
+    public static long[][] oldProcTicks;
 
     // KeyLogger
     private KeyLogger keylogger;
@@ -178,13 +182,14 @@ public class ClientManager {
     private static void sendCpuUsage(PrintWriter pw)
     {
         SystemInfo si = new SystemInfo();
+        CentralProcessor processor = si.getHardware().getProcessor();
         Hardware.CPU_Usage cpu_usage = new CPU_Usage(si);
         try {
             Packet packet = new Packet();
             packet.action = MessageType.PERFORMANCE_TRACK.getID();
 
-            double cpuData = cpu_usage.cpuData(si.getHardware().getProcessor());
-            double[] procData = cpu_usage.procData(si.getHardware().getProcessor());
+            double cpuData = cpu_usage.cpuData(processor,oldTicks);
+            double[] procData = cpu_usage.procData(processor,oldProcTicks);
 
             packet.data = new ArrayList<>();
 

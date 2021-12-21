@@ -46,9 +46,9 @@ public class CPU_Usage {
         Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
         sysData.setTimeBase(new Second(date));
-        sysData.addSeries(floatArrayPercent(cpu_usage.cpuData(processor)), 0, "All cpus");
+        sysData.addSeries(floatArrayPercent(cpu_usage.cpuData(processor,oldTicks)), 0, "All cpus");
 
-        double[] procUsage = cpu_usage.procData(processor);
+        double[] procUsage = cpu_usage.procData(processor,oldProcTicks);
         DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
         procData.setTimeBase(new Second(date));
 
@@ -68,10 +68,10 @@ public class CPU_Usage {
 
         Timer timer = new Timer(REFRESH_FAST, e -> {
             sysData.advanceTime();
-            sysData.appendData(floatArrayPercent(cpuData(processor)));
+            sysData.appendData(floatArrayPercent(cpuData(processor,oldTicks)));
             procData.advanceTime();
             int newest = procData.getNewestIndex();
-            double[] procUsageData = procData(processor);
+            double[] procUsageData = procData(processor,oldProcTicks);
             for (int i = 0; i < procUsageData.length; i++) {
                 procData.addValue(i, newest, (float) (100 * procUsageData[i]));
             }
@@ -86,13 +86,13 @@ public class CPU_Usage {
         return f;
     }
 
-    public double cpuData(CentralProcessor proc) {
+    public double cpuData(CentralProcessor proc, long[] oldTicks) {
         double d = proc.getSystemCpuLoadBetweenTicks(oldTicks);
         oldTicks = proc.getSystemCpuLoadTicks();
         return d;
     }
 
-    public double[] procData(CentralProcessor proc) {
+    public double[] procData(CentralProcessor proc, long[][] oldProcTicks) {
         double[] p = proc.getProcessorCpuLoadBetweenTicks(oldProcTicks);
         oldProcTicks = proc.getProcessorCpuLoadTicks();
         return p;
