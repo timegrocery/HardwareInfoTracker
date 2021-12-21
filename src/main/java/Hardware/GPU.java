@@ -56,11 +56,10 @@ public class GPU {
 
     @Override
     public String toString() {
-        int vRamInMb = Integer.parseInt(vRam)/1048576;
         return "GPU Name: " + name + "@@@&&&" +
                 "Device ID: " +deviceID + "@@@&&&" +
                 "Vendor: " + vendor + "@@@&&&" +
-                "Virtual RAM: " + vRamInMb + "Mb@@@&&&";
+                "Virtual RAM: " + vRam + "Mb@@@&&&";
     }
 
     public static ArrayList<GPU> GetGPU() {
