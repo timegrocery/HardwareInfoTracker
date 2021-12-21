@@ -147,6 +147,26 @@ public class CPU_Usage extends OshiJPanel {
         return p;
     }
 
+    public DynamicTimeSeriesCollection[] CreateTimeSeries(CentralProcessor processor) {
+        DynamicTimeSeriesCollection[] usageCollection = new DynamicTimeSeriesCollection[2];
+        Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
+        sysData.setTimeBase(new Second(date));
+        sysData.addSeries(floatArrayPercent(cpuData()), 0, "All cpus");
+
+        double[] procUsage = procData(processor);
+        DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
+        procData.setTimeBase(new Second(date));
+
+        for (int i = 0; i < procUsage.length; i++) {
+            procData.addSeries(floatArrayPercent(procUsage[i]), i, "cpu" + i);
+        }
+
+        usageCollection[0] = sysData;
+        usageCollection[1] = procData;
+
+        return usageCollection;
+    }
     public static  void main(String[] args)
     {
         JFrame frame = new JFrame();
