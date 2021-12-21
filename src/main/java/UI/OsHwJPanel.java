@@ -19,7 +19,7 @@ import java.util.List;
 
 public class OsHwJPanel extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
-    private static final String OPERATING_SYSTEM = "";
+    private static final String OPERATING_SYSTEM = "Operating System";
     private static final String HARDWARE_INFORMATION = "Hardware Information";
     private static final String PROCESSOR = "Processor";
     private static final String DISPLAYS = "Displays";
@@ -221,10 +221,10 @@ public class OsHwJPanel extends javax.swing.JPanel {
     }
 
    private void setEditable(boolean flag) {
-        jtaDisplay.setEditable(false); // tr�nh l?i trong l�c ch?nh s?a csdl
-       jtaHI.setEditable(false);
-       jtaOS.setEditable(false);
-       jtaProc.setEditable(false);
+        jtaDisplay.setEditable(false);
+        jtaHI.setEditable(false);
+        jtaOS.setEditable(false);
+        jtaProc.setEditable(false);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLblDisplay;
