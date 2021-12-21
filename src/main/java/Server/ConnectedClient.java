@@ -76,9 +76,7 @@ public class ConnectedClient{
                     Server.getInstance().getGUI().updateInfo();
 
                 } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
-
-                    SystemInfo si = new SystemInfo();
-                    Hardware.CPU_Usage cpu_usage = new Hardware.CPU_Usage(si);
+                    Hardware.CPU_Usage cpu_usage = new Hardware.CPU_Usage();
 
                     Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
                     DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
@@ -97,9 +95,6 @@ public class ConnectedClient{
                     for (int i = 0; i < procUsage.length; i++) {
                         procData.addSeries(Hardware.CPU_Usage.floatArrayPercent(procUsage[i]), i, "cpu" + i);
                     }
-
-                    Timer timer = cpu_usage.UpdateUsage(si.getHardware().getProcessor(),sysData,procData);
-                    timer.start();
 
                 } else if (packet.action == MessageType.COMMAND.getID()) {
                     if (command == null) {
