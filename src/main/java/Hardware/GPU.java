@@ -57,7 +57,10 @@ public class GPU {
 
     @Override
     public String toString() {
-        return "\nGPU Name: " + name + "\n" ;
+        return "GPU Name: " + name + "@@@&&&" +
+                "Device ID: " +deviceID + "@@@&&&" +
+                "Vendor: " + vendor + "@@@&&&" +
+                "Virtual RAM: " + vRam + "Mb@@@&&&";
     }
 
     public static ArrayList<GPU> GetGPU() {

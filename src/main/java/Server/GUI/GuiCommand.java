@@ -12,10 +12,7 @@ import Ultils.Packet;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,15 +51,37 @@ public class GuiCommand extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
         jTextPane1.setPreferredSize(new Dimension(700, 40));
+        jTextPane1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                System.out.println(e.getKeyCode());
+                if (e.getKeyCode() == 10) {
+                    String command = jTextPane1.getText();
+                    AddTextToArea(">" + command);
+                    jTextPane1.setText("");
+                    // send command
+                    Packet packet = new Packet();
+                    packet.action = MessageType.COMMAND.getID();
+                    packet.data = new ArrayList<String>();
+                    packet.data.add("execute");
+                    packet.data.add(command);
+                    packet.data.add("eof");
+                    try {
+                        NetUtils.sendMessage(packet, client.getPrintWriter());
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                }
+            }});
         jButton1 = new javax.swing.JButton();
         jButton1.setPreferredSize(new Dimension(100, 40));
         jButton1.setText("Send");
         jTextArea1.setText("");
         jButton1.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 String command = jTextPane1.getText();
-                AddTextToArea(command);
+                AddTextToArea(">" + command);
                 jTextPane1.setText("");
                 // send command
                 Packet packet = new Packet();
@@ -84,14 +103,11 @@ public class GuiCommand extends javax.swing.JFrame {
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(25);
-        jTextArea1.setRows(9999);
+        jTextArea1.setRows(5000);
         jTextArea1.setLineWrap(true);
         jTextArea1.setWrapStyleWord(true);
         jScrollPane1.setViewportView(jTextArea1);
-
         jScrollPane2.setViewportView(jTextPane1);
-
-
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,7 +157,7 @@ public class GuiCommand extends javax.swing.JFrame {
     public void AddTextToArea(String txt) {
         StringBuilder currentTxt = new StringBuilder(this.jTextArea1.getText());
         currentTxt.append(System.lineSeparator());
-        currentTxt.append(">" + txt);
+        currentTxt.append(txt);
         this.jTextArea1.setText(currentTxt.toString());
     }
 

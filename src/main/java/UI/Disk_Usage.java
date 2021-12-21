@@ -117,15 +117,15 @@ public class Disk_Usage extends OshiJPanel {
 
     public static void main(String[] args)
     {
-//        SystemInfo si = new SystemInfo();
-//        FileSystem fs = si.getOperatingSystem().getFileSystem();
-//
-//        List<OSFileStore> fileStores = fs.getFileStores();
-//
-//        for (OSFileStore osFileStore : fileStores)
-//        {
-//            System.out.println(osFileStore.toString());
-//        }
+        SystemInfo si = new SystemInfo();
+        FileSystem fs = si.getOperatingSystem().getFileSystem();
+
+        List<OSFileStore> fileStores = fs.getFileStores();
+
+        for (OSFileStore osFileStore : fileStores)
+        {
+            System.out.println(osFileStore.toString());
+        }
     }
 
 }
