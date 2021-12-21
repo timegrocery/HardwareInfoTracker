@@ -1,5 +1,6 @@
 package UI;
 
+import Hardware.GPU;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import oshi.SystemInfo;
@@ -39,103 +40,104 @@ public class OsHwJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents(SystemInfo si) {
         osPrefix = getOsPrefix(si);
-        jtaOS = new JTextArea();
-        jtaProc = new JTextArea();
-        jtaDisplay = new JTextArea();
-        jtaHI = new JTextArea();
-        jLblOS = new JLabel();
-        jLblProc = new JLabel();
-        jLblDisplay = new JLabel();
-        jLblHI = new JLabel();
+        jLblOS = new javax.swing.JLabel();
+        jLblProc = new javax.swing.JLabel();
+        jLblDisplay = new javax.swing.JLabel();
+        jLblHI = new javax.swing.JLabel();
+        jScrollOS = new javax.swing.JScrollPane();
+        jtaOS = new javax.swing.JTextArea();
+        jScrollHI = new javax.swing.JScrollPane();
+        jtaHI = new javax.swing.JTextArea();
+        jScrollDisplay = new javax.swing.JScrollPane();
+        jtaDisplay = new javax.swing.JTextArea();
+        jScrollProc = new javax.swing.JScrollPane();
+        jtaProc = new javax.swing.JTextArea();
 
-        setBackground(new Color(161, 201, 241));
-        setPreferredSize(new Dimension(810, 430));
+        setBackground(new java.awt.Color(161, 201, 241));
+        setPreferredSize(new java.awt.Dimension(810, 480));
 
-//        jtaOS.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                jtaOSActionPerformed(evt);
-//            }
-//        });
-//
-//        jtaProc.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                jtaProcActionPerformed(evt);
-//            }
-//        });
-//
-//        jtaDisplay.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                jtaDisplayActionPerformed(evt);
-//            }
-//        });
-//
-//        jtaHI.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent evt) {
-//                jtaHIActionPerformed(evt);
-//            }
-//        });
+        jLblOS.setText("Operating System");
 
-        jLblOS.setText(OPERATING_SYSTEM);
+        jLblProc.setText("Processor");
 
-        jLblProc.setText(PROCESSOR);
+        jLblDisplay.setText("Display");
 
-        jLblDisplay.setText(DISPLAYS);
+        jLblHI.setText("Hardware Infomation");
 
-        jLblHI.setText(HARDWARE_INFORMATION);
+        jtaOS.setColumns(20);
+        jtaOS.setRows(5);
+        jScrollOS.setViewportView(jtaOS);
+
+        jtaHI.setColumns(20);
+        jtaHI.setRows(5);
+        jScrollHI.setViewportView(jtaHI);
+
+        jtaDisplay.setColumns(20);
+        jtaDisplay.setRows(5);
+        jScrollDisplay.setViewportView(jtaDisplay);
+
+        jtaProc.setColumns(20);
+        jtaProc.setRows(5);
+        jScrollProc.setViewportView(jtaProc);
 
         jtaOS.setText(updateOsData(si));
         jtaProc.setText(getProc(si));
         jtaDisplay.setText(getDisplay(si));
         jtaHI.setText(getHw(si));
-        GroupLayout layout = new GroupLayout(this);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(140, 140, 140)
-                .addComponent(jLblOS)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
-                .addComponent(jLblHI)
-                .addGap(187, 187, 187))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(jtaProc, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtaOS, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtaDisplay, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(140, 140, 140)
+                                .addComponent(jLblOS))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(158, 158, 158)
+                                .addComponent(jLblDisplay))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(48, 48, 48)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollProc, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                                    .addComponent(jScrollOS)
+                                    .addComponent(jScrollDisplay))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLblProc)
+                        .addGap(149, 149, 149)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(166, 166, 166)
-                        .addComponent(jLblDisplay))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addComponent(jLblProc)))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jtaHI, GroupLayout.PREFERRED_SIZE, 386, GroupLayout.PREFERRED_SIZE)
-                .addGap(44, 44, 44))
+                        .addComponent(jScrollHI, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLblHI)
+                        .addGap(179, 179, 179))))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLblOS)
                     .addComponent(jLblHI))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jtaOS, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(jLblProc, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtaProc, GroupLayout.PREFERRED_SIZE, 134, GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
+                        .addComponent(jScrollOS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLblProc, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollProc, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLblDisplay)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtaDisplay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jtaHI, GroupLayout.PREFERRED_SIZE, 344, GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollHI))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         // Update up time every second
         Timer timer = new Timer(REFRESH_FAST, e -> jtaOS.setText(updateOsData(si)));
@@ -182,9 +184,10 @@ public class OsHwJPanel extends javax.swing.JPanel {
 
     private static String getProc(SystemInfo si) {
         StringBuilder sb = new StringBuilder();
+        GPU gpu = new GPU();
         CentralProcessor proc = si.getHardware().getProcessor();
         sb.append(proc.toString());
-
+        sb.append(gpu.getGPUInformation());
         return sb.toString();
     }
 
@@ -231,6 +234,10 @@ public class OsHwJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLblHI;
     private javax.swing.JLabel jLblOS;
     private javax.swing.JLabel jLblProc;
+    private javax.swing.JScrollPane jScrollDisplay;
+    private javax.swing.JScrollPane jScrollHI;
+    private javax.swing.JScrollPane jScrollOS;
+    private javax.swing.JScrollPane jScrollProc;
     private javax.swing.JTextArea jtaDisplay;
     private javax.swing.JTextArea jtaHI;
     private javax.swing.JTextArea jtaOS;

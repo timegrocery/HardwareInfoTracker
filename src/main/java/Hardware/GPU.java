@@ -15,6 +15,7 @@ public class GPU {
     String vendor;
     String vRam;
 
+    public GPU(){}
     public GPU(String name, String deviceID, String vendor, String vRam) {
         this.name = StringUltils.NormalizeSpaces(name);
         this.deviceID = StringUltils.NormalizeSpaces(deviceID);
@@ -79,7 +80,7 @@ public class GPU {
         return result;
     }
 
-    public static String GetGPUInformation() {
+    public static String getGPUInformation() {
         StringBuilder result = new StringBuilder();
         for (GPU g: GetGPU()) {
             result.append(g.toString());
@@ -87,6 +88,6 @@ public class GPU {
         return result.toString();
     }
     public static void main(String[] args) {
-        System.out.println(GetGPUInformation());
+        System.out.println(getGPUInformation());
     }
 }

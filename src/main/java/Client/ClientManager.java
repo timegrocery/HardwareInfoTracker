@@ -291,7 +291,7 @@ public class ClientManager {
         packet.action = MessageType.HARDWARE_INFO.getID();
         packet.data = new ArrayList<>();
         packet.data.add("gpu");
-        packet.data.add(GPU.GetGPUInformation().toString());
+        packet.data.add(GPU.getGPUInformation().toString());
         try {
             NetUtils.sendMessage(packet, pw);
             System.out.println("Sending gpu info " + packet.data);
