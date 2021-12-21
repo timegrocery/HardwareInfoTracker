@@ -1,6 +1,9 @@
 package Hardware;
 
 import UI.OshiJPanel;
+import Ultils.MessageType;
+import Ultils.NetUtils;
+import Ultils.Packet;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -11,8 +14,10 @@ import oshi.hardware.CentralProcessor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class CPU_Usage {
@@ -86,6 +91,38 @@ public class CPU_Usage {
         double[] p = proc.getProcessorCpuLoadBetweenTicks(oldProcTicks);
         oldProcTicks = proc.getProcessorCpuLoadTicks();
         return p;
+    }
+
+    public static void sendCpuUsage(PrintWriter pw)
+    {
+        SystemInfo si = new SystemInfo();
+        Hardware.CPU_Usage cpu_usage = new CPU_Usage(si);
+        try {
+            Packet packet = new Packet();
+            packet.action = MessageType.PERFORMANCE_TRACK.getID();
+
+            DynamicTimeSeriesCollection[] cpuTimeSeries = cpu_usage.CreateTimeSeries(si);
+
+            Number cpuResult = cpuTimeSeries[0].getX(0,0);
+            Number[] procResult = new Number[cpuTimeSeries[1].getItemCount(0)];
+
+            for (int j = 0; j < cpuTimeSeries[1].getItemCount(0); ++j)
+            {
+                procResult[j] = cpuTimeSeries[1].getX(0,j);
+            }
+
+            packet.data = new ArrayList<>();
+
+            packet.data.add(String.valueOf(cpuResult));
+
+            for (int i = 0; i < procResult.length; ++i) {
+                packet.data.add(String.valueOf(procResult[i]));
+            }
+
+            NetUtils.sendMessage(packet,pw);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static  void main(String[] args)
