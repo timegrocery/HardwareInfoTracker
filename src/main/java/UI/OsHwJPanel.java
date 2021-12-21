@@ -159,7 +159,7 @@ public class OsHwJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jtaHIActionPerformed
 
     private static String getOsPrefix(SystemInfo si) {
-        StringBuilder sb = new StringBuilder(OPERATING_SYSTEM);
+        StringBuilder sb = new StringBuilder();
 
         OperatingSystem os = si.getOperatingSystem();
         sb.append(String.valueOf(os));
