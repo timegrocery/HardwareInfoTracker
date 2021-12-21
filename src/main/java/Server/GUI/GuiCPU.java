@@ -3,6 +3,7 @@ package Server.GUI;
 import Server.ConnectedClient;
 import UI.CPU_Usage;
 import UI.OshiJPanel;
+import org.jfree.data.time.DynamicTimeSeriesCollection;
 
 import javax.swing.*;
 
@@ -17,9 +18,9 @@ public class GuiCPU extends javax.swing.JFrame {
         this.setResizable(false);
     }
 
+
+
     public void init() {
-        CPU_Usage cpuPanel = new CPU_Usage();
-        frame.add(cpuPanel);
-        frame.setVisible(true);
+
     }
 }

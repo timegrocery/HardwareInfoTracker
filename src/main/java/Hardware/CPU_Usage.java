@@ -34,6 +34,11 @@ public class CPU_Usage {
         oldProcTicks = new long[cpu.getLogicalProcessorCount()][CentralProcessor.TickType.values().length];
     }
 
+    public CPU_Usage()
+    {
+
+    }
+
     public DynamicTimeSeriesCollection[] CreateTimeSeries(SystemInfo si) {
         CentralProcessor processor = si.getHardware().getProcessor();
         Hardware.CPU_Usage cpu_usage = new Hardware.CPU_Usage(si);
@@ -148,6 +153,9 @@ public class CPU_Usage {
         JFreeChart procCpu = ChartFactory.createTimeSeriesChart("Processor CPU Usage", "Time", "% CPU", cpuSeries[1], true,
                 true, false);
 
+        Timer timer = cpu_usage.UpdateUsage(si.getHardware().getProcessor(),cpuSeries[0],cpuSeries[1]);
+        timer.start();
+
         JPanel cpuPanel = new JPanel();
         cpuPanel.setLayout(new GridBagLayout());
         cpuPanel.add(new ChartPanel(systemCpu), sysConstraints);
@@ -155,9 +163,6 @@ public class CPU_Usage {
 
         OshiJPanel oshiJPanel = new OshiJPanel();
         oshiJPanel.add(cpuPanel, BorderLayout.CENTER);
-
-        Timer timer = cpu_usage.UpdateUsage(si.getHardware().getProcessor(),cpuSeries[0],cpuSeries[1]);
-        timer.start();
 
         JFrame frame = new JFrame();
         frame.add(oshiJPanel);
