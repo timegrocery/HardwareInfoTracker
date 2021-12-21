@@ -22,4 +22,6 @@ public class GuiCPU extends javax.swing.JFrame {
         frame.add(cpuPanel);
         frame.setVisible(true);
     }
+
+
 }
