@@ -127,13 +127,6 @@ public class GuiMain extends JFrame {
                 p.data.add("start");
 
                 for (ConnectedClient cc : clientList.getSelectedValuesList()) {
-                    /*
-                    try {
-                        NetUtils.sendMessage(p,cc.getPrintWriter());
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                     */
                     try {
                         NetUtils.sendMessage(p, cc.getPrintWriter());
                     } catch (Exception ex) {

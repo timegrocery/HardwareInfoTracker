@@ -6,6 +6,7 @@ import UI.OshiJPanel;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
+import org.jetbrains.annotations.NotNull;
 import org.jfree.data.time.DynamicTimeSeriesCollection;
 
 import javax.swing.*;
@@ -23,12 +24,11 @@ public class GuiCPU extends javax.swing.JFrame {
     private ConnectedClient client;
     private CPU_Usage cpuPanel;
     private JPanel contentPane;
-    public GuiCPU(ConnectedClient client) {
+    public GuiCPU(@NotNull ConnectedClient client) {
         this.client = client;
         frame = new JFrame();
-        DynamicTimeSeriesCollection[] cpuTimeSeries = new DynamicTimeSeriesCollection[2];
-        cpuPanel = new CPU_Usage(cpuTimeSeries);
-        cpuPanel.setSize(new Dimension(1350,750));
+        cpuPanel = new CPU_Usage(client.connectedTimeSeries);
+        cpuPanel.setSize(new Dimension(1800,800));
         contentPane = new JPanel();
         contentPane.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
         setContentPane(contentPane);
@@ -44,8 +44,6 @@ public class GuiCPU extends javax.swing.JFrame {
         frame.setSize(1400, 800);
     }
 
-    public void init() {
-    }
 
     public void SetCpuUsage(DynamicTimeSeriesCollection[] dynamicTimeSeriesCollections) {
         if (dynamicTimeSeriesCollections == null) {

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import Hardware.CPU;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -20,9 +21,6 @@ import oshi.hardware.CentralProcessor;
 public class CPU_Usage extends OshiJPanel {
 
     private static final long serialVersionUID = 1L;
-    public static final int REFRESH_FAST = 1000;
-    private long[] oldTicks;
-    private long[][] oldProcTicks;
 
     public CPU_Usage(DynamicTimeSeriesCollection[] cpuTimeSeries) {
         super();
@@ -39,11 +37,10 @@ public class CPU_Usage extends OshiJPanel {
         GridBagConstraints procConstraints = (GridBagConstraints) sysConstraints.clone();
         procConstraints.gridx = 1;
 
-
-        JFreeChart systemCpu = ChartFactory.createTimeSeriesChart("System CPU Usage", "Time", "% CPU", cpuTimeSeries[0], true,
+        JFreeChart systemCpu = ChartFactory.createTimeSeriesChart("System CPU Usage", "Time", "% CPU",cpuTimeSeries[0], true,
                 true, false);
         JFreeChart procCpu = ChartFactory.createTimeSeriesChart("Processor CPU Usage", "Time", "% CPU", cpuTimeSeries[1], true,
-                true, false);
+               true, false);
 
         JPanel cpuPanel = new JPanel();
         cpuPanel.setLayout(new GridBagLayout());
