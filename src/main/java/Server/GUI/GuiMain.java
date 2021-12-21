@@ -105,13 +105,23 @@ public class GuiMain extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Packet p = new Packet();
                 p.action = MessageType.PERFORMANCE_TRACK.getID();
-                for (ConnectedClient cc : clientList.getSelectedValuesList())
-                {
+                p.data = new ArrayList<>();
+                p.data.add("start");
+
+                for (ConnectedClient cc : clientList.getSelectedValuesList()) {
+                    /*
                     try {
                         NetUtils.sendMessage(p,cc.getPrintWriter());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
+                     */
+                    try {
+                        NetUtils.sendMessage(p, cc.getPrintWriter());
+                    } catch (Exception ex) {
+                        System.out.println("Failed to send start tracking packet");
+                    }
+                    cc.OpenCpuView();
                 }
             }
         }));

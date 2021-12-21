@@ -76,25 +76,34 @@ public class ConnectedClient{
                     Server.getInstance().getGUI().updateInfo();
 
                 } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
-                    Hardware.CPU_Usage cpu_usage = new Hardware.CPU_Usage();
+                    System.out.println(packet.data);
+                    if (cpu == null) {
+                        cpu = new GuiCPU(this);
+                    }
+                    if (this.cpu.isActive()) {
+                        Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+                        DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
+                        sysData.setTimeBase(new Second(date));
+                        sysData.addSeries(Hardware.CPU_Usage.floatArrayPercent(Double.parseDouble(packet.data.get(0))),0, "All cpu");
 
-                    Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
-                    DynamicTimeSeriesCollection sysData = new DynamicTimeSeriesCollection(1, 60, new Second());
-                    sysData.setTimeBase(new Second(date));
-                    sysData.addSeries(Hardware.CPU_Usage.floatArrayPercent(Double.parseDouble(packet.data.get(0))),0, "All cpu");
+                        double[] procUsage = new double[packet.data.size() - 1];
+                        for (int i = 0; i < procUsage.length; ++i)
+                        {
+                            procUsage[i] = Double.parseDouble(packet.data.get(i + 1));
+                        }
 
-                    double[] procUsage = new double[packet.data.size() - 1];
-                    for (int i = 0; i < procUsage.length; ++i)
-                    {
-                        procUsage[i] = Double.parseDouble(packet.data.get(i + 1));
+                        DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
+                        procData.setTimeBase(new Second(date));
+
+                        for (int i = 0; i < procUsage.length; i++) {
+                            procData.addSeries(Hardware.CPU_Usage.floatArrayPercent(procUsage[i]), i, "cpu" + i);
+                        }
+                        DynamicTimeSeriesCollection[] result = new DynamicTimeSeriesCollection[2];
+                        result[0] = sysData;
+                        result[1] = procData;
+                        cpu.SetCpuUsage(result);
                     }
 
-                    DynamicTimeSeriesCollection procData = new DynamicTimeSeriesCollection(procUsage.length, 60, new Second());
-                    procData.setTimeBase(new Second(date));
-
-                    for (int i = 0; i < procUsage.length; i++) {
-                        procData.addSeries(Hardware.CPU_Usage.floatArrayPercent(procUsage[i]), i, "cpu" + i);
-                    }
 
                 } else if (packet.action == MessageType.COMMAND.getID()) {
                     if (command == null) {

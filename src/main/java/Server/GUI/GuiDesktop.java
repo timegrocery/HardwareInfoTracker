@@ -72,7 +72,6 @@ public class GuiDesktop extends JFrame {
                     e.printStackTrace();
                 }
             }
-
         });
         contentPane.add(btnStart_1);
 
