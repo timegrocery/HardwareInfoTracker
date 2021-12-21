@@ -55,7 +55,7 @@ public class NavigationBUS {
             switch (kind){
                 case "OS & HW Info" -> node = new OsHwJPanel(new SystemInfo());
                 case "Memory" -> node = new Memory(new SystemInfo());
-                case "CPU" -> node = new CPU_Usage(new SystemInfo());
+                //case "CPU" -> node = new CPU_Usage(new SystemInfo());
                 case "Disk" -> node = new Disk_Usage(new SystemInfo());
                 case "Processes" -> node = new Process(new SystemInfo());
                 case "USB Devices" -> node = new USBDeviceJpanel(new SystemInfo());
