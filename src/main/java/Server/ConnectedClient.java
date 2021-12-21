@@ -1,6 +1,5 @@
 package Server;
 
-import Hardware.CPU_Usage;
 import Server.Exception.ClientDisconnectedException;
 import Server.GUI.*;
 import Ultils.MessageType;
@@ -8,6 +7,8 @@ import Ultils.NetUtils;
 import Ultils.Packet;
 import org.jfree.data.time.DynamicTimeSeriesCollection;
 import org.jfree.data.time.Second;
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -17,7 +18,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
@@ -79,6 +79,47 @@ public class ConnectedClient{
 
                 } else if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
                     System.out.println(packet.data);
+
+                    CentralProcessor processor = new SystemInfo().getHardware().getProcessor();
+
+                    Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+                    connectedTimeSeries[0] = new DynamicTimeSeriesCollection(1, 60, new Second());
+                    connectedTimeSeries[0].setTimeBase(new Second(date));
+
+                    float[] cpuData = new float[connectedTimeSeries[0].getItemCount(0)];
+                    String[] tempCpuData = packet.data.get(0).split(" ");
+
+                    for (int i = 0; i < cpuData.length && i < tempCpuData.length; ++i)
+                    {
+                        cpuData[i] = Float.parseFloat(tempCpuData[i]);
+                    }
+
+                    connectedTimeSeries[0].addSeries(cpuData,0, "All cpu");
+
+                    int procMaxSeries = processor.getLogicalProcessorCount();
+
+                    connectedTimeSeries[1] = new DynamicTimeSeriesCollection(procMaxSeries,60, new Second());
+                    connectedTimeSeries[1].setTimeBase(new Second(date));
+
+                    float[] procData = new float[connectedTimeSeries[1].getItemCount(0)];
+                    for (int i = 0; i < procMaxSeries; ++i)
+                    {
+                        String[] tempProcData = packet.data.get(i + 1).split(" ");
+
+                        for (int j = 0; j < procData.length; ++j)
+                        {
+                            procData[j] = Float.parseFloat(tempProcData[j]);
+                        }
+                        connectedTimeSeries[1].addSeries(procData, i, "Cpu" + i);
+                    }
+
+                    DynamicTimeSeriesCollection[] result = new DynamicTimeSeriesCollection[2];
+
+                    result[0] = connectedTimeSeries[0];
+                    result[1] = connectedTimeSeries[1];
+
+                    cpu.SetCpuUsage(result);
+
                     if (cpu == null) {
                         cpu = new GuiCPU(this);
                     }

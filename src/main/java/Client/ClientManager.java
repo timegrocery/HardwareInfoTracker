@@ -187,18 +187,47 @@ public class ClientManager {
         try {
             Packet packet = new Packet();
             packet.action = MessageType.PERFORMANCE_TRACK.getID();
-
-            double cpuData = cpu_usage.cpuData(processor,oldTicks);
-            double[] procData = cpu_usage.procData(processor,oldProcTicks);
-
             packet.data = new ArrayList<>();
 
-            for (int i = 0; i < procData.length; ++i)
-            {
-                packet.data.add(String.valueOf(procData[i] * 100));
-            }
+           DynamicTimeSeriesCollection[] timeSeries = cpu_usage.CreateTimeSeries(si);
 
-            packet.data.add(String.valueOf(cpuData * 100));
+           Number[] cpuData = new Number[timeSeries[0].getItemCount(0)];
+           StringBuilder cpuPacketInput = new StringBuilder();
+           for (int i = 0; i < cpuData.length; ++i)
+           {
+                cpuData[i] = timeSeries[0].getX(0,i);
+           }
+           for (int i = 0; i < cpuData.length; ++i)
+           {
+               cpuPacketInput.append((cpuData[i]) + " ");
+           }
+
+           packet.data.add(cpuPacketInput.toString());
+
+           int rowLimit = timeSeries[1].getSeriesCount();
+           int columnLimit = timeSeries[1].getItemCount(0);
+           Number[][] procData = new Number[rowLimit][columnLimit];
+
+           for (int i = 0; i < rowLimit; ++i)
+           {
+               for (int j = 0; j < columnLimit; ++j)
+               {
+                   procData[i][j] = timeSeries[1].getX(i,j);
+               }
+           }
+
+           for (int i = 0; i < rowLimit; ++i)
+           {
+               StringBuilder procPacketInput = new StringBuilder();
+               for (int j = 0; j < columnLimit; ++j)
+               {
+                   procPacketInput.append(procData[i][j] + " ");
+               }
+               packet.data.add(procPacketInput.toString());
+           }
+
+            Timer timer = cpu_usage.UpdateUsage(processor,timeSeries[0],timeSeries[1]);
+            timer.start();
 
             NetUtils.sendMessage(packet,pw);
         } catch (Exception e){

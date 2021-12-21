@@ -27,6 +27,10 @@ public class CPU_Usage extends OshiJPanel {
         init(cpuTimeSeries);
     }
 
+    public  CPU_Usage()
+    {
+        super();
+    }
 
     public void init(DynamicTimeSeriesCollection[] cpuTimeSeries) {
 
