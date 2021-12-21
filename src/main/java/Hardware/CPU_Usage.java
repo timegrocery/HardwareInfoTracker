@@ -119,6 +119,9 @@ public class CPU_Usage {
                 packet.data.add(String.valueOf(procResult[i]));
             }
 
+            Timer timer = cpu_usage.UpdateUsage(si.getHardware().getProcessor(),cpuTimeSeries[0],cpuTimeSeries[1]);
+            timer.start();
+
             NetUtils.sendMessage(packet,pw);
         } catch (Exception e){
             e.printStackTrace();
