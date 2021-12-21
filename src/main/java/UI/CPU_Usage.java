@@ -29,7 +29,6 @@ public class CPU_Usage extends OshiJPanel {
         init(cpuTimeSeries);
     }
 
-
     public void init(DynamicTimeSeriesCollection[] cpuTimeSeries) {
 
         GridBagConstraints sysConstraints = new GridBagConstraints();
@@ -55,8 +54,7 @@ public class CPU_Usage extends OshiJPanel {
 
     }
 
-    public static  void main(String[] args)
-    {
+    public static  void main(String[] args) {
 
     }
 

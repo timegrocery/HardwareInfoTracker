@@ -1,7 +1,7 @@
 package Ultils;
 
 public enum MessageType {
-    HARDWARE_INFO(1),
+    CLIENT_INFO(1),
     PERFORMANCE_TRACK(2),
     STORAGE_TRACK(3),
     END_PROCESS(4),
@@ -13,7 +13,8 @@ public enum MessageType {
     COMMAND(10),
     ALTF4(11),
     MESSAGE_BOX(12),
-    GUI_TEXT(13);
+    GUI_TEXT(13),
+    HARDWARE_INFO(14);
 
     private int id;
 

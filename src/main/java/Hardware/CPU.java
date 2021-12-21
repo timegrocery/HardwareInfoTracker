@@ -82,13 +82,13 @@ public class CPU {
     @Override
     public String toString() {
 
-        return cpuName + '\n' +
-                cpuPacket + '\n' +
-                cpuCore + '\n' +
-                logicalCpu + '\n' +
-                identifier + '\n' +
-                processorID + '\n' +
-                microarchitecture + "\n";
+        return "CPU Name: " + cpuName + "@@@&&&" +
+                "CPU Packet: " + cpuPacket + "@@@&&&" +
+                "Core: " + cpuCore + "@@@&&&" +
+                "Logical CPU: " + logicalCpu + "@@@&&&" +
+                identifier + "@@@&&&" +
+                processorID + "@@@&&&" +
+                microarchitecture + "@@@&&&";
     }
 
     public static String getCpuInformation() {

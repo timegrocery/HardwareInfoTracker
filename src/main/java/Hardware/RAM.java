@@ -24,7 +24,7 @@ public class RAM {
             clockSpeed /= 1_000_000; // clock speed in Hz;
             String manufacturer = physicalMemory.getManufacturer();
             String memoryType = physicalMemory.getMemoryType();
-            String temp = String.format("Bank Label: %s\nCapacity: %dMb\nClock Speed: %dHz\nManufacturer: %s\nMemory Type: %s\n", bankLabel, capacity, clockSpeed, manufacturer, memoryType);
+            String temp = String.format("Bank Label: %s@@@&&&Capacity: %dMb@@@&&&Clock Speed: %dHz@@@&&&Manufacturer: %s@@@&&&Memory Type: %s@@@&&&", bankLabel, capacity, clockSpeed, manufacturer, memoryType);
             result.append(temp);
         }
         String totalCapacityString = String.format("Total Capacity: %dMb", totalCapacity);

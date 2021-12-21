@@ -15,19 +15,19 @@ public class OS {
 
         version = osVersionInfo.getVersion();
         if (version != null && !version.isEmpty() && !version.isBlank()) {
-            result.append(String.format("Windows %s ", version));
+            result.append(String.format("Windows %s ", version)).append("@@@&&&");
         }
         if (bitness != 0) {
-            result.append(String.format("%d bit ", bitness));
+            result.append(String.format("%d bit ", bitness)).append("@@@&&&");
         }
         codeName = osVersionInfo.getCodeName();
         if (codeName != null && !codeName.isBlank() && !codeName.isEmpty()) {
-            result.append(String.format("Code %s ", codeName));
+            result.append(String.format("Code %s ", codeName)).append("@@@&&&");
         }
 
         buildNumber = osVersionInfo.getBuildNumber();
         if (buildNumber != null && !buildNumber.isBlank() && !buildNumber.isEmpty()) {
-            result.append(String.format("Build %s ", buildNumber));
+            result.append(String.format("Build %s ", buildNumber)).append("@@@&&&");
         }
 
         return result.toString();

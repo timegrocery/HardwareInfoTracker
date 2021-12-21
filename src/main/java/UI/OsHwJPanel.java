@@ -19,7 +19,7 @@ import java.util.List;
 
 public class OsHwJPanel extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
-    private static final String OPERATING_SYSTEM = "Operating System";
+    private static final String OPERATING_SYSTEM = "";
     private static final String HARDWARE_INFORMATION = "Hardware Information";
     private static final String PROCESSOR = "Processor";
     private static final String DISPLAYS = "Displays";

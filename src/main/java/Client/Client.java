@@ -1,13 +1,8 @@
 package Client;
 
-import UI.CPU_Usage;
-import UI.Disk_Usage;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
-import oshi.SystemInfo;
-import oshi.software.os.FileSystem;
-import oshi.software.os.OSFileStore;
 
 import java.io.*;
 import java.net.Socket;
@@ -15,9 +10,7 @@ import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Client {
     public static final int PORT = 1337;
@@ -80,7 +73,7 @@ public class Client {
     private void sendInfo(PrintWriter pw, Socket s) {
         try {
             Packet packet = new Packet();
-            packet.action = MessageType.HARDWARE_INFO.getID();
+            packet.action = MessageType.CLIENT_INFO.getID();
             packet.data = Arrays.asList(new String[] {System.getProperty("os.name"), System.getProperty("user.name")});
             NetUtils.sendMessage(packet, pw);
         } catch (Exception e) {

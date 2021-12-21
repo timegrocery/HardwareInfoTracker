@@ -22,7 +22,7 @@ public class Disk {
             }
             long usable = fileStore.getUsableSpace();
             long total = fileStore.getTotalSpace();
-            result.append("\nAvailable: " + FormatUtil.formatBytes(usable) + "/" + FormatUtil.formatBytes(total) + "\n");
+            result.append("@@@&&&Available: " + FormatUtil.formatBytes(usable) + "/" + FormatUtil.formatBytes(total) + "@@@&&&");
         }
         return result.toString();
     }

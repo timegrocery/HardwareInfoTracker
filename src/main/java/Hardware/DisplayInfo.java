@@ -34,7 +34,7 @@ public class DisplayInfo {
             int vSize = EdidUtil.getVcm(edid);
             String manufacturerID = EdidUtil.getManufacturerID(edid);
             String productID = EdidUtil.getProductID(edid);
-            result = String.format("Display %s: %dcm x %d cm\nManufacture ID: %s\nProduct ID: %s",
+            result = String.format("Display %s: %dcm x %d cm@@@&&&Manufacture ID: %s@@@&&&Product ID: %s@@@&&&",
                     name,
                     hSize,
                     vSize,
@@ -54,7 +54,7 @@ public class DisplayInfo {
         for (Display display : displays) {
             sb.append(GetDisplayInformation(display, i));
             if (i++ > 0) {
-                sb.append('\n');
+                sb.append("@@@&&&");
             }
         }
         return sb.toString();

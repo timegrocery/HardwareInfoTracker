@@ -57,13 +57,13 @@ public class GPU {
     @Override
     public String toString() {
 
-        return name + '\n' +
-                deviceID + '\n' +
-                vendor + '\n' +
-                vRam + '\n';
+        return "GPU Name: " + name + "@@@&&&" +
+                "Device ID: " +deviceID + "@@@&&&" +
+                "Vendor: " + vendor + "@@@&&&" +
+                "Virtual RAM: " + Integer.parseInt(vRam)/1048576 + "Mb@@@&&&";
     }
 
-    public static ArrayList<GPU> GetGPUInformation() {
+    public static ArrayList<GPU> GetGPU() {
         SystemInfo si = new SystemInfo();
         ArrayList<GPU> result = new ArrayList<>();
         List<GraphicsCard> vga_list = si.getHardware().getGraphicsCards();
@@ -80,9 +80,14 @@ public class GPU {
         return result;
     }
 
-    public static void main(String[] args) {
-        for (GPU g : GetGPUInformation()) {
-            System.out.println(g.toString());
+    public static String GetGPUInformation() {
+        StringBuilder result = new StringBuilder();
+        for (GPU g: GetGPU()) {
+            result.append(g.toString());
         }
+        return result.toString();
+    }
+    public static void main(String[] args) {
+        System.out.println(GetGPUInformation());
     }
 }

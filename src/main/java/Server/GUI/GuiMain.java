@@ -80,7 +80,25 @@ public class GuiMain extends JFrame {
 
     public void popupMenu() {
         JPopupMenu jPopupMenu = new JPopupMenu();
-        jPopupMenu.add(createAction("INFO", MessageType.HARDWARE_INFO));
+        jPopupMenu.add(createAction("Update Client Info", MessageType.CLIENT_INFO));
+        jPopupMenu.add(createAction("Hardware Info", MessageType.HARDWARE_INFO, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (ConnectedClient cc: clientList.getSelectedValuesList()) {
+                    cc.OpenHardwareInfoView();
+                    Packet packet = new Packet();
+                    packet.action = MessageType.HARDWARE_INFO.getID();
+                    packet.data = new ArrayList<>();
+                    packet.data.add("request");
+                    System.out.println("Sending cpu info request to client");
+                    try {
+                        NetUtils.sendMessage(packet, cc.getPrintWriter());
+                    } catch (Exception er) {
+                        System.out.println("Failed to send cpu info request");
+                    }
+                }
+            }
+        }));
         jPopupMenu.add(createAction("Alt F4", MessageType.ALTF4));
         jPopupMenu.add(createAction("Desktop Viewer", MessageType.DESKTOP, new ActionListener() {
 
@@ -100,7 +118,7 @@ public class GuiMain extends JFrame {
                 }
             }
         }));
-        jPopupMenu.add(createAction("CPU_Usage", MessageType.PERFORMANCE_TRACK, new ActionListener() {
+        jPopupMenu.add(createAction("CPU Usage", MessageType.PERFORMANCE_TRACK, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Packet p = new Packet();
