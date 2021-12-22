@@ -9,6 +9,8 @@ import Server.ConnectedClient;
 import Ultils.MessageType;
 import Ultils.NetUtils;
 import Ultils.Packet;
+import Ultils.StringUltils;
+import org.jfree.chart.util.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,18 +56,21 @@ public class GuiCommand extends javax.swing.JFrame {
         jTextPane1.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                System.out.println(e.getKeyCode());
                 if (e.getKeyCode() == 10) {
                     String command = jTextPane1.getText();
+                    if (StringUltils.NormalizeSpaces(command).isEmpty() || StringUltils.NormalizeSpaces(command).isBlank()) {
+                        jTextPane1.setText("");
+                        return;
+                    }
                     AddTextToArea(">" + command);
                     jTextPane1.setText("");
+
                     // send command
                     Packet packet = new Packet();
                     packet.action = MessageType.COMMAND.getID();
                     packet.data = new ArrayList<String>();
                     packet.data.add("execute");
                     packet.data.add(command);
-                    packet.data.add("eof");
                     try {
                         NetUtils.sendMessage(packet, client.getPrintWriter());
                     } catch (Exception exception) {
@@ -81,6 +86,10 @@ public class GuiCommand extends javax.swing.JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 String command = jTextPane1.getText();
+                if (StringUltils.NormalizeSpaces(command).isEmpty() || StringUltils.NormalizeSpaces(command).isBlank()) {
+                    jTextPane1.setText("");
+                    return;
+                }
                 AddTextToArea(">" + command);
                 jTextPane1.setText("");
                 // send command
